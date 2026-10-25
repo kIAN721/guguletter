@@ -137,6 +137,43 @@ class ProceduralAudio {
   }
   
   /* ==========================================================
+   Intro Message Box & 10-9-8-7-6-5-4-3-2-1 Countdown before Envelope shows
+========================================================== */
+window.addEventListener('DOMContentLoaded', () => {
+  const introBox = document.querySelector('.countdown-intro-box');
+  const realEnvelopeWrapper = document.getElementById('real-envelope-wrapper');
+  const countNumEl = document.getElementById('intro-countdown');
+
+  if (introBox && realEnvelopeWrapper && countNumEl) {
+    let timeLeft = 10;
+    countNumEl.textContent = timeLeft;
+
+    const introTimer = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        countNumEl.textContent = timeLeft;
+      } else if (timeLeft === 0) {
+        countNumEl.textContent = "✨";
+      } else {
+        clearInterval(introTimer);
+        // Fade out intro box and show real envelope
+        introBox.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        introBox.style.opacity = '0';
+        introBox.style.transform = 'translateY(-10px)';
+        
+        setTimeout(() => {
+          introBox.style.display = 'none';
+          realEnvelopeWrapper.style.display = 'block';
+          setTimeout(() => {
+            realEnvelopeWrapper.style.opacity = '1';
+          }, 50);
+        }, 500);
+      }
+    }, 1000);
+  }
+});
+
+  /* ==========================================================
      3. Two-Stage Envelope Transition & Typewriter Animation
   ========================================================== */
   const envelopeStage = document.getElementById('envelope-stage');

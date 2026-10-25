@@ -16,23 +16,31 @@
   </button>
 
   <div class="container">
-    
-    <!-- ================= STAGE 1: ENVELOPE STAGE ================= -->
+    <!-- ================= STAGE 1: MESSAGE BOX & COUNTDOWN ================= -->
     <div id="envelope-stage">
       <span class="badge">A special letter just for you</span>
       <h1>Open This Whenever You Feel Sad 顾顾 🥺✨</h1>
-      <p class="subtitle">I made this little page with all the love i have for you.</p>
-
-      <!-- 3D Envelope -->
-      <div class="perspective-box">
-        <div id="envelope" class="envelope">
-          <div class="envelope-base"></div>
-          <div id="envelope-flap" class="envelope-flap"></div>
-          <div class="envelope-pocket"></div>
-          <div id="wax-seal" class="wax-seal">💌</div>
-        </div>
+      
+      <!-- Message Box & Countdown before envelope shows -->
+      <div class="countdown-intro-box">
+        <p class="countdown-msg">Surprise……🤪 မုန့်ဖိုးတော့မဟုတ်ဘူး မုန့်ဖိုးကတော့နောက်မှပေါ့ဟီးးးးးး ဒါလေးအရင်ကြည့်လိုက်ဦးနော်🙄</p>
+        <div id="intro-countdown" class="intro-countdown-num">10</div>
+        <p class="countdown-sub">Getting ready for you 💖</p>
       </div>
-      <div id="tap-hint" class="tap-hint">Tap the wax seal to open 💌</div>
+
+      <!-- Envelope (Hidden initially until countdown finishes) -->
+      <div id="real-envelope-wrapper" style="display: none; opacity: 0; transition: opacity 0.8s ease;">
+        <p class="subtitle" style="margin-top: 15px;">I made this little page with all the love i have for you.</p>
+        <div class="perspective-box">
+          <div id="envelope" class="envelope">
+            <div class="envelope-base"></div>
+            <div id="envelope-flap" class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div id="wax-seal" class="wax-seal">💌</div>
+          </div>
+        </div>
+        <div id="tap-hint" class="tap-hint">Tap the wax seal to open 💌</div>
+      </div>
     </div>
 
     <!-- ================= STAGE 2: LETTER & MODULES ================= -->
