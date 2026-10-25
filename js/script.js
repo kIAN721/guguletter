@@ -67,8 +67,13 @@ class ProceduralAudio {
     }
   
     toggle() {
-      if (this.isPlaying) this.stop();
-      else this.start();
+      // Pause MP3 if it's playing when turning on chimes
+      if (!this.isPlaying) {
+        pauseMp3Player();
+        this.start();
+      } else {
+        this.stop();
+      }
     }
   }
   
@@ -205,7 +210,7 @@ class ProceduralAudio {
   }
   
 /* ==========================================================
-   4. MP3 Playlist Controller
+   4. MP3 Playlist Controller (Fixed Audio Overlap)
 ========================================================== */
 const mp3Player = document.getElementById('mp3-player');
 const songButtons = document.querySelectorAll('.song-item');
@@ -213,9 +218,23 @@ const nowPlayingTitle = document.getElementById('now-playing-title');
 const playPauseMain = document.getElementById('play-pause-main');
 const progressBar = document.getElementById('progress-bar');
 const topMusicText = document.getElementById('music-text');
+const topMusicIcon = document.getElementById('music-icon');
 
 let currentSongIndex = 0;
 let isMp3Playing = false;
+
+// Helper to pause MP3 when top button is used
+function pauseMp3Player() {
+  if (mp3Player && !mp3Player.paused) {
+    mp3Player.pause();
+  }
+  isMp3Playing = false;
+  songButtons.forEach(item => {
+    item.classList.remove('active');
+    item.querySelector('.song-icon').textContent = '▶️';
+  });
+  if (playPauseMain) playPauseMain.textContent = '▶️';
+}
 
 function loadAndPlaySong(index, autoPlay = true) {
   const btn = songButtons[index];
@@ -249,6 +268,7 @@ function loadAndPlaySong(index, autoPlay = true) {
       btn.querySelector('.song-icon').textContent = '⏸️';
       if (playPauseMain) playPauseMain.textContent = '⏸️';
       if (topMusicText) topMusicText.textContent = 'Mute';
+      if (topMusicIcon) topMusicIcon.textContent = '🎵';
     }).catch(err => console.log("Make sure the MP3 file exists in the audio/ folder:", err));
   }
 }
@@ -268,6 +288,7 @@ function toggleMp3Play() {
       if (activeBtn) activeBtn.querySelector('.song-icon').textContent = '⏸️';
       if (playPauseMain) playPauseMain.textContent = '⏸️';
       if (topMusicText) topMusicText.textContent = 'Mute';
+      if (topMusicIcon) topMusicIcon.textContent = '🎵';
     }).catch(err => console.log("MP3 play error:", err));
   } else {
     mp3Player.pause();
@@ -275,6 +296,7 @@ function toggleMp3Play() {
     if (activeBtn) activeBtn.querySelector('.song-icon').textContent = '▶️';
     if (playPauseMain) playPauseMain.textContent = '▶️';
     if (topMusicText) topMusicText.textContent = 'Play Music';
+    if (topMusicIcon) topMusicIcon.textContent = '🎵';
   }
 }
 
@@ -567,7 +589,7 @@ function textBubble(text, clientX, clientY) {
   bubble.style.boxShadow = '0 4px 12px rgba(225,29,72,0.15)';
   bubble.style.zIndex = '1000';
   bubble.style.pointerEvents = 'none';
-  bubble.style.transition = 'all 1.5s ease-out';
+  bubble.style.transition = 'all 2s ease-out';
   
   document.body.appendChild(bubble);
   
