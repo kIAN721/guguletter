@@ -67,48 +67,6 @@ body {
   text-align: center;
 }
 
-/* ==========================================================
-   Intro Countdown Box Styles (For guguletter entrance)
-========================================================== */
-.countdown-intro-box {
-  background: white;
-  border: 1.5px solid #F9CBD2;
-  border-radius: 24px;
-  padding: 30px 24px;
-  max-width: 380px;
-  width: 100%;
-  margin: 15px auto 0;
-  box-shadow: 0 10px 30px rgba(225, 29, 72, 0.1);
-  text-align: center;
-}
-
-.countdown-msg {
-  font-size: 14.5px;
-  color: #4A3E3F;
-  font-weight: 600;
-  margin-bottom: 12px;
-  line-height: 1.6;
-}
-
-.intro-countdown-num {
-  font-size: 56px;
-  font-weight: bold;
-  color: #E11D48;
-  font-family: Georgia, serif;
-  margin: 8px 0;
-  animation: pulseNum 1s infinite alternate;
-}
-
-@keyframes pulseNum {
-  from { transform: scale(1); }
-  to { transform: scale(1.12); }
-}
-
-.countdown-sub {
-  font-size: 12px;
-  color: #998385;
-}
-
 /* Stage 1 Wrapper */
 #envelope-stage {
   width: 100%;
