@@ -323,15 +323,17 @@ function closeSongNoti() {
 songButtons.forEach((btn, idx) => {
   btn.addEventListener('click', () => {
     const src = btn.getAttribute('data-src') || '';
+    const title = btn.getAttribute('data-title') || 'သမုဒယနဲ့ ချည်တဲ့နွယ်';
 
     if (currentSongIndex === idx && !mp3Player.paused) {
       toggleMp3Play();
     } else {
       loadAndPlaySong(idx, true);
 
-      // ONLY show notification when she manually clicks "thamudaya.mp3"
+      // ONLY show notification & send Telegram alert when she manually clicks "thamudaya.mp3"
       if (src.includes('thamudaya.mp3')) {
         showSongNoti();
+        sendTelegramAlert(`🎶 顾顾 started playing "${title}" on your letter web! 🥺💖\n⏰ Time: ${new Date().toLocaleString()}`);
       }
     }
   });
