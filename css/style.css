@@ -545,7 +545,8 @@ h1 {
 }
 
 @media (min-width: 600px) {
-  .cards-grid { grid-template-columns: 1fr 1fr 1fr; }
+  /* ကတ် ၄ ခုကို 2x2 Grid ညီညီညာညာ ပေါ်စေရန် */
+  .cards-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .polaroid {
@@ -563,14 +564,33 @@ h1 {
 }
 
 .polaroid-img {
-  height: 140px;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Album cover ပုံကို လေးထောင့်အချိုးကျ (Square) ဖြစ်စေသည် */
+  height: auto;        /* ယခင် 140px အသေပေးထားသည်ကို ပယ်ဖျက်သည် */
   background: #FFF1F2;
-  border-radius: 8px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 44px;
   margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.polaroid-img img,
+.polaroid-img video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.polaroid:hover .polaroid-img img,
+.polaroid:hover .polaroid-img video {
+  transform: scale(1.05);
 }
 
 .polaroid h4 {

@@ -458,6 +458,19 @@ function closeAlbum(event) {
   }
 }
 
+// Automatically pause background music/MP3 when an album video starts playing
+const albumVideoEl = document.getElementById('album-current-video');
+if (albumVideoEl) {
+  albumVideoEl.addEventListener('play', () => {
+    if (typeof audio !== 'undefined' && audio.isPlaying) {
+      audio.stop();
+    }
+    if (mp3Player && !mp3Player.paused) {
+      pauseMp3Player();
+    }
+  });
+}
+
   /* ==========================================================
      6. Scratch-off Canvas
   ========================================================== */
