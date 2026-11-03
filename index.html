@@ -8,8 +8,10 @@
 </head>
 <body>
 
+  <!-- Background Falling Petals Canvas -->
   <canvas id="petals-canvas"></canvas>
 
+  <!-- Floating Sound Toggle Button -->
   <button id="music-toggle" class="music-btn">
     <span id="music-icon">🎵</span>
     <span id="music-text">Play Music</span>
@@ -17,7 +19,9 @@
 
   <div class="container">
     
-    <!-- ================= STAGE 1: ENVELOPE STAGE ================= -->
+    <!-- ==========================================================
+         STAGE 1: INTERACTIVE 3D ENVELOPE STAGE
+    =========================================================== -->
     <div id="envelope-stage">
       <span class="badge">A special letter just for you</span>
       <h1>Open This Whenever You Feel Sad 顾顾 🥺✨</h1>
@@ -35,10 +39,12 @@
       <div id="tap-hint" class="tap-hint">Tap the wax seal to open 💌</div>
     </div>
 
-    <!-- ================= STAGE 2: LETTER & MODULES ================= -->
+    <!-- ==========================================================
+         STAGE 2: LETTER & INTERACTIVE MODULES
+    =========================================================== -->
     <div id="letter-container">
       
-      <!-- Handwritten style letter -->
+      <!-- 1. Handwritten Style Letter -->
       <div class="parchment">
         <div class="greeting">‌ကုကုရေ.....,</div>
         <div id="typewriter" class="letter-body"></div>
@@ -51,7 +57,7 @@
         </div>
       </div>
 
-      <!-- MP3 Song Playlist -->
+      <!-- 2. MP3 Song Playlist -->
       <div class="playlist-box">
         <h3 class="section-title">Songs For You 🎶</h3>
         <p class="section-subtitle">Tap any song to listen while you read</p>
@@ -66,6 +72,7 @@
           <button id="play-pause-main" class="np-btn">▶️</button>
         </div>
 
+        <!-- Scrollable Song List -->
         <div class="song-list">
           <button class="song-item active" data-src="audio/forya.mp3" data-title="For ya (给你呀) - 蒋小呢">
             <span class="song-icon">▶️</span>
@@ -180,13 +187,13 @@
         <audio id="mp3-player" preload="auto"></audio>
       </div>
 
-      <!-- Polaroids -->
+      <!-- 3. Polaroids Photo & Video Albums -->
       <div>
         <h3 class="section-title">Things I Cherish</h3>
         <p class="section-subtitle">Tap any card to open our album 📸✨</p>
         <div class="cards-grid">
           
-          <!-- Card 1: 5 Photos of Us -->
+          <!-- Card 1: 11 Photos of Us -->
           <div class="polaroid" onclick="openAlbum(this)" data-title="Moments With You 💕" data-images="images/us1.jpg,images/us2.jpg,images/us3.jpg,images/us4.jpg,images/us5.jpg,images/us6.jpg,images/us7.jpg,images/us8.jpg,images/us9.jpg,images/us10.jpg,images/us11.jpg">
             <div class="polaroid-img">
               <img src="images/us4.jpg" alt="Us together">
@@ -206,7 +213,7 @@
             <p>ကုကုနဲ့စကားပြောရရင် ဘာအကြောင်းပဲဖြစ်နေပါစေ ဒီလိုလေးစကားပြောနေရရင်ကို ဝမ်ဝမ်းတွက်အဓိပ္ပာယ်ရှိနေပြီ</p>
           </div>
 
-          <!-- Card 3: 13 Photos + 1 Video of Her -->
+          <!-- Card 3: 25 Photos + 1 Video of Her -->
           <div class="polaroid" onclick="openAlbum(this)" data-title="My Favorite View 🌸" data-images="images/her1.jpg,images/her2.jpg,images/her3.jpg,images/her4.jpg,images/her5.jpg,images/her6.jpg,images/her7.jpg,images/her8.jpg,images/her9.jpg,images/her10.jpg,images/her11.jpg,images/her12.jpg,images/her13.jpg,images/her14.jpg,images/her15.jpg,images/her16.jpg,images/her17.jpg,images/her18.jpg,images/her19.jpg,images/her20.jpg,images/her21.jpg,images/her22.jpg,images/her23.jpg,images/her24.jpg,images/her25.jpg,images/her26.mp4 ">
             <div class="polaroid-img">
               <img src="images/her7.jpg" alt="My favorite view">
@@ -216,10 +223,10 @@
             <p>ဒါကတော့ ဝမ်ဝမ်းအကြိုက်ဆုံးကုကုပုံလေးတွေပေါ့ အကြိုက်ဆုံးကတော့ ဝမ်ဝမ်းရိုက်ပေးထားတဲ့ပုံတွေပေါ့ဗျာ🙄</p>
           </div>
 
-          <!-- Card 4: Edit Videos Album -->
+          <!-- Card 4: 3 Edit Videos Album -->
           <div class="polaroid" onclick="openAlbum(this)" data-title="Edit Videos 🎬✨" data-images="images/edit1.mp4,images/edit2.mp4,images/edit3.mp4">
             <div class="polaroid-img">
-              <!-- #t=0.5 က ဗီဒီယိုရဲ့ 0.5 စက္ကန့်က ပုံကို Cover အဖြစ် အလိုအလျောက် ယူပြပေးပါတယ် -->
+              <!-- #t=0.5 automatically grabs the video frame at 0.5 seconds as the album cover thumbnail -->
               <video src="images/edit1.mp4#t=0.5" muted playsinline preload="metadata"></video>
               <span class="photo-count">🎞️ 3</span>
             </div>
@@ -230,7 +237,7 @@
         </div>
       </div>
 
-      <!-- Scratch Card -->
+      <!-- 4. Interactive Scratch Card -->
       <div class="secret-box">
         <h3 class="secret-title">Secret Note</h3>
         <p class="secret-subtitle">Rub the card below with your finger or mouse</p>
@@ -245,7 +252,7 @@
         </div>
       </div>
 
-      <!-- No-Pressure Reassurance Note + Silent Reaction -->
+      <!-- 5. No-Pressure Reassurance Note + Silent Reaction -->
       <div class="reassurance-box">
         <span class="reassurance-badge">🌿 Reassurance Note For 顾顾</span>
         <p class="reassurance-text">
@@ -274,8 +281,7 @@
         </div>
       </div>
 
-
-      <!-- Smile & Chat Prompt -->
+      <!-- 6. Smile & Chat Prompt -->
       <div class="proposal-box">
         <div class="proposal-icon">🥺💬✨</div>
         <h3>အခု ကုကု ပြုံးသွားပြီမလားဟင်?</h3>
@@ -290,7 +296,11 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- ==========================================================
+       POPUP MODALS & OVERLAYS
+  =========================================================== -->
+
+  <!-- 1. Smile Confirmation Modal -->
   <div id="modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-icon">🥰✨</div>
@@ -310,7 +320,7 @@
     </div>
   </div>
 
-<!-- Photo & Video Album Popup Modal -->
+  <!-- 2. Photo & Video Album Lightbox Modal -->
   <div id="album-modal" class="album-modal" onclick="closeAlbum(event)">
     <div class="album-box" onclick="event.stopPropagation()">
       <button class="album-close" onclick="closeAlbum()">✕</button>
@@ -328,7 +338,7 @@
     </div>
   </div>
 
-<!-- Special Song Notification Toast -->
+  <!-- 3. Special Song Notification Toast -->
   <div id="song-noti" class="song-noti">
     <span class="noti-icon">💌</span>
     <div class="noti-content">
