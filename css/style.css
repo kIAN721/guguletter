@@ -638,11 +638,12 @@ h1 {
 }
 
 /* Popup Album Lightbox Modal */
+/* Full-Screen Popup Album Lightbox Modal */
 .album-modal {
   position: fixed;
   inset: 0;
-  background: rgba(30, 15, 25, 0.78);
-  backdrop-filter: blur(8px);
+  background: rgba(12, 6, 10, 0.96);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -650,7 +651,7 @@ h1 {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  padding: 16px;
+  padding: 0;
 }
 
 .album-modal.active {
@@ -659,51 +660,70 @@ h1 {
 }
 
 .album-box {
-  background: #fff;
-  border-radius: 24px;
-  padding: 24px;
-  max-width: 440px;
-  width: 100%;
+  background: transparent;
+  border-radius: 0;
+  padding: 20px 16px;
+  max-width: 100%;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  transform: translateY(20px) scale(0.95);
+  box-shadow: none;
+  transform: scale(0.96);
   transition: transform 0.3s ease;
 }
 
 .album-modal.active .album-box {
-  transform: translateY(0) scale(1);
+  transform: scale(1);
 }
 
 .album-box h3 {
-  color: #d81b60;
-  margin-bottom: 14px;
-  font-size: 1.25rem;
+  color: #FFE4E6;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .album-close {
-  position: absolute;
-  top: 14px;
-  right: 16px;
-  background: #fce4ec;
-  color: #d81b60;
-  border: none;
-  width: 34px;
-  height: 34px;
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   font-weight: bold;
+  z-index: 20;
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.album-close:hover {
+  background: #E11D48;
+  border-color: #E11D48;
+  transform: scale(1.08);
 }
 
 .album-viewer {
   position: relative;
   width: 100%;
-  height: 60vh;
-  max-height: 460px;
-  min-height: 280px;
-  background: #fdf6f9;
-  border-radius: 16px;
+  flex: 1;
+  max-height: calc(100dvh - 140px);
+  background: transparent;
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -712,62 +732,75 @@ h1 {
 
 .album-viewer img,
 .album-viewer video {
-  max-width: 100%;
+  max-width: 95vw;
   max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   transition: opacity 0.2s ease;
 }
 
 .album-nav {
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.85);
-  color: #d81b60;
-  border: none;
-  width: 38px;
-  height: 38px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
 }
 
-.album-nav.prev { left: 10px; }
-.album-nav.next { right: 10px; }
+.album-nav:hover {
+  background: #E11D48;
+  border-color: #E11D48;
+}
+
+.album-nav.prev { left: 16px; }
+.album-nav.next { right: 16px; }
 
 .album-dots {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 14px;
-  padding: 0 12px;
+  margin-top: 12px;
+  padding: 0 16px;
 }
 
 .album-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #f8bbd0;
+  background: rgba(255, 255, 255, 0.35);
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 .album-dot.active {
-  background: #d81b60;
-  width: 22px;
+  background: #F43F5E;
+  width: 24px;
   border-radius: 10px;
 }
 
 .album-counter {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: #888;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: #FBCFE8;
+  font-weight: 600;
 }
 
 /* ==========================================================
