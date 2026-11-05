@@ -137,6 +137,15 @@
             <span class="playing-bars">🎵</span>
           </button>
 
+          <button class="song-item" data-src="audio/kauk.mp3" data-title="ကောက်တေး - Bunny Phyoe">
+            <span class="song-icon">▶️</span>
+            <div class="song-info">
+              <span class="song-title">ကောက်တေး</span>
+              <span class="song-artist">Bunny Phyoe</span>
+            </div>
+            <span class="playing-bars">🎵</span>
+          </button>
+
           <button class="song-item" data-src="audio/thamudaya.mp3" data-title="သမုဒယနဲ့ ချည်တဲ့နွယ် - G Fatt">
             <span class="song-icon">▶️</span>
             <div class="song-info">
@@ -338,11 +347,11 @@
     </div>
   </div>
 
-  <!-- 3. Special Song Notification Toast -->
+  <!-- 3. Special Song Notification Toast (with id="song-noti-title" added) -->
   <div id="song-noti" class="song-noti">
     <span class="noti-icon">💌</span>
     <div class="noti-content">
-      <strong>ဟိတ် သိနေတယ်နော်😏!!!!!!!</strong>
+      <strong id="song-noti-title">ဟိတ် သိနေတယ်နော်😏!!!!!!!</strong>
       <p id="song-noti-text">ဒီသီချင်းကထည့်ချင်လို့တော့မဟုတ်ပါဘူးနော်😒. ကုကဒီသီချင်းနားထောင်ရင် တစ်မျိုးလေး အေးချမ်းသလိုမျိုးခံစားရတယ်ဆိုလို့ နားထောင်စေချင်လို့ထည့်လိုက်တာပါနော်💞.</p>
     </div>
     <button class="noti-close" onclick="closeSongNoti()">✕</button>

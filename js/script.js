@@ -302,15 +302,25 @@ function toggleMp3Play() {
 
 let notiTimer = null;
 
-function showSongNoti() {
+function showSongNoti(customTitle, customMessage) {
   const noti = document.getElementById('song-noti');
+  const notiTitle = document.getElementById('song-noti-title');
+  const notiText = document.getElementById('song-noti-text');
   if (!noti) return;
+
+  if (notiTitle && customTitle) {
+    notiTitle.textContent = customTitle;
+  }
+  if (notiText && customMessage) {
+    notiText.textContent = customMessage;
+  }
+
   noti.classList.add('show');
 
   if (notiTimer) clearTimeout(notiTimer);
   notiTimer = setTimeout(() => {
     noti.classList.remove('show');
-  }, 10000); // Hide toast after 10 seconds
+  }, 10000);
 }
 
 function closeSongNoti() {
@@ -319,21 +329,32 @@ function closeSongNoti() {
   if (notiTimer) clearTimeout(notiTimer);
 }
 
-// Handle song selection from the playlist
 songButtons.forEach((btn, idx) => {
   btn.addEventListener('click', () => {
     const src = btn.getAttribute('data-src') || '';
-    const title = btn.getAttribute('data-title') || 'သမုဒယနဲ့ ချည်တဲ့နွယ်';
+    const title = btn.getAttribute('data-title') || '';
 
     if (currentSongIndex === idx && !mp3Player.paused) {
       toggleMp3Play();
     } else {
       loadAndPlaySong(idx, true);
 
-      // Show special toast & send Telegram alert when she clicks "thamudaya.mp3"
+      // 1. "သမုဒယနဲ့ ချည်တဲ့နွယ်"
       if (src.includes('thamudaya.mp3')) {
-        showSongNoti();
+        showSongNoti(
+          "ဟိတ် သိနေတယ်နော်😏!!!!!!!", 
+          "ဒီသီချင်းကထည့်ချင်လို့တော့မဟုတ်ပါဘူးနော်😒. ကုကဒီသီချင်းနားထောင်ရင် တစ်မျိုးလေး အေးချမ်းသလိုမျိုးခံစားရတယ်ဆိုလို့ နားထောင်စေချင်လို့ထည့်လိုက်တာပါနော်💞."
+        );
         sendTelegramAlert(`🎶 顾顾 started playing "${title}" on your letter web! 🥺💖\n⏰ Time: ${new Date().toLocaleString()}`);
+      }
+
+      // 2. "ကောက်တေး"
+      if (src.includes('kauk.mp3')) {
+        showSongNoti(
+          "စိတ်ကောက်တာချော့တဲ့သီချင်းလေးပေါ့🙄", 
+          "စိတ်ကောက်နေတုန်းကချော့ချင်လို့ထည့်လိုက်တာဟီးးးးး စိတ်ကောက်တယ်ဆို ဒီသီချင်းလေးနားထောင်ပေးပါနော်🥺"
+        );
+        sendTelegramAlert(`🎶 顾顾 started playing "${title}" (ကောက်တေး) on your letter web! 🤪💖\n⏰ Time: ${new Date().toLocaleString()}`);
       }
     }
   });
