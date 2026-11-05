@@ -656,3 +656,69 @@ yesBtn.addEventListener('click', () => {
 modalCloseBtn.addEventListener('click', () => {
   modal.style.display = 'none';
 });
+
+/* ==========================================================
+   9. FULL-SCREEN ROSE SURPRISE OVERLAY & FLOATING CORNER BUTTON
+========================================================== */
+function acceptRose(e) {
+  if (e) e.stopPropagation();
+
+  const roseOverlay = document.getElementById('rose-overlay');
+  const floatingRoseBtn = document.getElementById('floating-rose-btn');
+  const acceptBtn = document.getElementById('accept-rose-btn');
+
+  // 1. Immediately trigger the smooth 1.2s slow fade-out & show corner button
+  if (roseOverlay) roseOverlay.classList.remove('active');
+  if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
+
+  // 2. Play gentle chime chord
+  if (typeof audio !== 'undefined') {
+    audio.playChimeChord();
+  }
+
+  // 3. Burst floating roses & hearts across the screen
+  const rect = acceptBtn ? acceptBtn.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0 };
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top;
+  const particles = ['🌹', '🤍', '🌸', '✨', '💖', '🌹'];
+
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      textBubble(
+        particles[i % particles.length],
+        centerX + (Math.random() - 0.5) * 220,
+        centerY + (Math.random() - 0.5) * 60
+      );
+    }, i * 65);
+  }
+
+  // 4. Show on-screen notification toast for her
+  showSongNoti(
+    "Flower Accepted 🌹🤍",
+    "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
+  );
+
+  // 5. Send instant Telegram notification
+  sendTelegramAlert(`🌹 顾顾 accepted your special Rose ("ဟုတ်ကဲ့ပါ ပန်းလေးလက်ခံပါတယ်ရှင် 🌹✨") on the Letter Web!\n⏰ Time: ${new Date().toLocaleString()}`);
+}
+
+function reopenRose() {
+  const roseOverlay = document.getElementById('rose-overlay');
+  if (roseOverlay) {
+    roseOverlay.classList.add('active');
+  }
+
+  // Play gentle chime chord when reopening
+  if (typeof audio !== 'undefined') {
+    audio.playChimeChord();
+  }
+
+  // Show on-screen notification toast
+  showSongNoti(
+    "ကုကုအတွက် နှင်းဆီပန်းလေး 🌹✨",
+    "အတွေးမလွန်နဲ့တော့နော် ကုကုရေ... စိတ်အေးအေးလေးထားနော် ဘာမှမဖြစ်ဘူးနော် ကုကု အဆင်ပြေသွားမှာအကုန်လုံး..နော် 🥺🤍"
+  );
+
+  // Send instant Telegram notification
+  sendTelegramAlert(`🌹 顾顾 tapped the glowing corner Rose button to reopen and look at your flower again! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
+}

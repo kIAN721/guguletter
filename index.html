@@ -155,6 +155,15 @@
             <span class="playing-bars">🎵</span>
           </button>
 
+          <button class="song-item" data-src="audio/500.mp3" data-title="500 Miles - Peter, Paul and Mary">
+            <span class="song-icon">▶️</span>
+            <div class="song-info">
+              <span class="song-title">500 Miles</span>
+              <span class="song-artist">Peter, Paul and Mary</span>
+            </div>
+            <span class="playing-bars">🎵</span>
+          </button>
+
           <button class="song-item" data-src="audio/company.mp3" data-title="Company - Justin Bieber">
             <span class="song-icon">▶️</span>
             <div class="song-info">
@@ -356,6 +365,37 @@
     </div>
     <button class="noti-close" onclick="closeSongNoti()">✕</button>
   </div>
+
+  <!-- 4. Special Rose Surprise Overlay (First Open + Re-openable) -->
+  <div id="rose-overlay" class="rose-overlay active">
+    <div class="rose-card">
+      <span class="rose-badge">🌹 A Little Rose For 顾顾 ✨</span>
+      
+      <!-- Pure CSS & Emoji Animated Rose Illustration -->
+      <div class="rose-illustration">
+        <div class="rose-glow-ring"></div>
+        <span class="sparkle s-1">✨</span>
+        <span class="sparkle s-2">🫧</span>
+        <span class="sparkle s-3">✨</span>
+        <div class="rose-main-icon">🌹</div>
+      </div>
+
+      <h3 class="rose-title">ဒီနေ့ ကုကုအတွက်နှင်းဆီပန်းလေးတစ်ပွင့်ပါဟီးးး🌹🥺</h3>
+      <p class="rose-message">
+        "ရည်းစားမဟုတ်တဲ့ ကုကုလေးရေ…. အတွေးတွေအရမ်းများပြီးစိတ်ပင်ပန်းနေရတယ်မလားဟင် အများကြီးမတွေးနဲ့တော့နော် ကုကုအကောင်းကြိုးစားပြီးနေနေတယ်နော်၊ ဝမ်ဝမ်းသိတယ်နော် ကုကုလည်း ကုကိုယ်တိုင်သိတယ်နော်၊ ဝမ်ဝမ်းဘေးမှာအမြဲရှိတယ်ဗျာ။ ဒီနေ့လည်း ကုကုပျော်ပျော်ရွှင်ရွှင်နဲ့ကြိုးစားလိုက်ပါဦးနော် ကုကု🍀✨💞"
+      </p>
+
+      <button type="button" id="accept-rose-btn" class="accept-rose-btn" onclick="acceptRose(event)">
+        ဟုတ်ကဲ့ပါ ပန်းလေးလက်ခံပါတယ်ရှင် 🌹✨
+      </button>
+    </div>
+  </div>
+
+  <!-- 5. Noticeable Glowing Floating Rose Button (Bottom-Right Corner) -->
+  <button type="button" id="floating-rose-btn" class="floating-rose-btn" onclick="reopenRose()" title="Open your rose again 🌹">
+    <span class="floating-rose-ring"></span>
+    <span class="floating-rose-icon">🌹</span>
+  </button>
 
   <script src="js/script.js"></script>
 </body>
