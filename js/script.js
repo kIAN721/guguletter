@@ -819,7 +819,7 @@ function closeRoseOverlay(e) {
   if (roseOverlay) roseOverlay.classList.remove('active');
   if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
 
-  sendTelegramAlert(`🌹 顾顾 closed your Rose overlay using the X button on the Letter Web.\n⏰ Time: ${new Date().toLocaleString()}`);
+  // sendTelegramAlert(`🌹 顾顾 closed your Rose overlay using the X button on the Letter Web.\n⏰ Time: ${new Date().toLocaleString()}`);
 }
 
 function reopenRose() {
