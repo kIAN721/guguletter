@@ -1124,7 +1124,7 @@ h1 {
 }
 
 /* ==========================================================
-   9. FULL-SCREEN ROSE SURPRISE OVERLAY & GLOWING CORNER BUTTON
+   9. FULL-SCREEN ROSE SURPRISE OVERLAY & BLOOMING SVG ROSE
 ========================================================== */
 .rose-overlay {
   position: fixed;
@@ -1141,7 +1141,6 @@ h1 {
   opacity: 0;
   pointer-events: none;
   will-change: opacity;
-  /* Pure GPU-accelerated opacity fade with zero visibility snap */
   transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -1188,33 +1187,38 @@ h1 {
   box-shadow: 0 0 20px rgba(225, 29, 72, 0.3);
 }
 
-/* Giant Full-Screen Animated Rose Illustration */
+/* Interactive Blooming SVG Rose Stage */
 .rose-illustration {
   position: relative;
-  width: 140px;
-  height: 140px;
-  margin: 0 auto 16px;
+  width: 175px;
+  height: 195px;
+  margin: 0 auto 18px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(225, 29, 72, 0.35) 0%, rgba(244, 63, 94, 0.12) 60%, transparent 100%);
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.38) 0%, rgba(244, 63, 94, 0.12) 62%, transparent 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 50px rgba(225, 29, 72, 0.45);
+  box-shadow: 0 0 55px rgba(225, 29, 72, 0.45);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media (min-width: 600px) {
   .rose-illustration {
-    width: 180px;
-    height: 180px;
+    width: 205px;
+    height: 220px;
   }
 }
 
 .rose-glow-ring {
   position: absolute;
-  inset: 0;
+  inset: 6px;
   border-radius: 50%;
-  border: 2.5px dashed rgba(251, 113, 133, 0.55);
-  animation: spinSlow 14s linear infinite;
+  border: 2px dashed rgba(251, 113, 133, 0.5);
+  animation: spinSlow 16s linear infinite;
+  pointer-events: none;
 }
 
 @keyframes spinSlow {
@@ -1222,36 +1226,177 @@ h1 {
   to { transform: rotate(360deg); }
 }
 
-.rose-main-icon {
-  font-size: 85px;
-  line-height: 1;
-  filter: drop-shadow(0 12px 24px rgba(225, 29, 72, 0.65));
-  animation: floatRose 3s ease-in-out infinite;
+/* SVG Rose Plant Container */
+.svg-rose-plant {
+  width: 155px;
+  height: 185px;
+  overflow: visible;
+  transform-origin: 100px 225px;
+  animation: idleBreezeSway 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 10px 22px rgba(225, 29, 72, 0.55));
   z-index: 2;
-  user-select: none;
 }
 
 @media (min-width: 600px) {
-  .rose-main-icon {
-    font-size: 110px;
+  .svg-rose-plant {
+    width: 180px;
+    height: 210px;
   }
 }
 
-@keyframes floatRose {
-  0%, 100% { transform: translateY(0) scale(1) rotate(-3deg); }
-  50% { transform: translateY(-12px) scale(1.08) rotate(4deg); }
+/* Waving Dance Animation When She Taps the Rose */
+.rose-illustration.waving .svg-rose-plant {
+  animation: roseWaveDance 0.9s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+}
+
+@keyframes idleBreezeSway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg) translateY(-3px); }
+}
+
+@keyframes roseWaveDance {
+  0%   { transform: rotate(0deg) scale(1); }
+  20%  { transform: rotate(-14deg) scale(1.08) translateY(-5px); }
+  40%  { transform: rotate(13deg) scale(1.1) translateY(-7px); }
+  60%  { transform: rotate(-9deg) scale(1.06) translateY(-3px); }
+  80%  { transform: rotate(5deg) scale(1.02); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* Stem Growth Animation */
+.svg-stem {
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+}
+
+.rose-overlay.active .svg-stem {
+  animation: drawRoseStem 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes drawRoseStem {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Leaf Unfurling Animation */
+.svg-leaf {
+  opacity: 0;
+  transform-box: fill-box;
+}
+
+.svg-leaf.l-left { transform-origin: right bottom; }
+.svg-leaf.l-right { transform-origin: left bottom; }
+
+.rose-overlay.active .svg-leaf.l-left {
+  animation: unfurlSvgLeaf 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+}
+
+.rose-overlay.active .svg-leaf.l-right {
+  animation: unfurlSvgLeaf 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s forwards;
+}
+
+@keyframes unfurlSvgLeaf {
+  0% { opacity: 0; transform: scale(0.1) rotate(-25deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Layered Rose Petal Blooming Sequence */
+.svg-petal,
+.svg-sepal {
+  opacity: 0;
+  transform-origin: 100px 115px;
+}
+
+.rose-overlay.active .svg-sepal {
+  animation: bloomSvgCenter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s forwards;
+}
+
+.rose-overlay.active .svg-petal.p-back {
+  animation: bloomSvgCenter 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+}
+
+.rose-overlay.active .svg-petal.p-center {
+  animation: bloomSvgCenter 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.48s forwards;
+}
+
+.rose-overlay.active .svg-petal.p-mid-left {
+  animation: bloomSvgLeft 1.05s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+}
+
+.rose-overlay.active .svg-petal.p-mid-right {
+  animation: bloomSvgRight 1.05s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s forwards;
+}
+
+.rose-overlay.active .svg-petal.p-outer-left {
+  animation: bloomSvgOuterLeft 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s forwards;
+}
+
+.rose-overlay.active .svg-petal.p-outer-right {
+  animation: bloomSvgOuterRight 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
+}
+
+@keyframes bloomSvgCenter {
+  0% { opacity: 0; transform: scale(0.15) translateY(18px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes bloomSvgLeft {
+  0% { opacity: 0; transform: scale(0.2) rotate(18deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes bloomSvgRight {
+  0% { opacity: 0; transform: scale(0.2) rotate(-18deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes bloomSvgOuterLeft {
+  0% { opacity: 0; transform: scale(0.2) rotate(28deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-4deg); }
+}
+
+@keyframes bloomSvgOuterRight {
+  0% { opacity: 0; transform: scale(0.2) rotate(-28deg); }
+  100% { opacity: 1; transform: scale(1) rotate(4deg); }
+}
+
+/* Custom Falling Velvet Rose Petal Shape (Spawned on Tap) */
+.falling-rose-petal {
+  position: fixed;
+  width: 16px;
+  height: 20px;
+  background: linear-gradient(135deg, #FDA4AF 0%, #E11D48 65%, #9F1239 100%);
+  border-radius: 60% 40% 60% 40% / 70% 50% 50% 30%;
+  box-shadow: 0 4px 10px rgba(225, 29, 72, 0.45);
+  z-index: 3000;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.rose-tap-hint {
+  position: absolute;
+  bottom: -10px;
+  background: rgba(225, 29, 72, 0.28);
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  color: #FFE4E6;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  z-index: 5;
+  animation: pulse 1.8s infinite;
 }
 
 .rose-illustration .sparkle {
   position: absolute;
-  font-size: 24px;
+  font-size: 22px;
   animation: twinkleSparkle 2s ease-in-out infinite alternate;
-  z-index: 3;
+  z-index: 4;
+  pointer-events: none;
 }
 
 .rose-illustration .s-1 { top: 8px; left: 12px; animation-delay: 0s; }
 .rose-illustration .s-2 { top: 16px; right: 8px; animation-delay: 0.6s; }
-.rose-illustration .s-3 { bottom: 10px; left: 20px; animation-delay: 1.2s; }
+.rose-illustration .s-3 { bottom: 18px; left: 14px; animation-delay: 1.2s; }
 
 @keyframes twinkleSparkle {
   0% { opacity: 0.35; transform: scale(0.8); }

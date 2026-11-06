@@ -658,14 +658,81 @@ modalCloseBtn.addEventListener('click', () => {
 });
 
 /* ==========================================================
-   9. FULL-SCREEN ROSE SURPRISE OVERLAY & FLOATING CORNER BUTTON
+   9. FULL-SCREEN ROSE SURPRISE OVERLAY & INTERACTIVE BLOOMING ROSE
 ========================================================== */
-function spawnSmoothPetals(startX, startY) {
+let rosePokeCount = 0;
+
+function spawnFallingRosePetals(centerX, centerY, count = 10) {
+  const fragment = document.createDocumentFragment();
+  const petals = [];
+
+  for (let i = 0; i < count; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'falling-rose-petal';
+    const startX = centerX + (Math.random() - 0.5) * 60;
+    const startY = centerY + (Math.random() - 0.5) * 30;
+    const scale = Math.random() * 0.45 + 0.75;
+
+    petal.style.left = `${startX}px`;
+    petal.style.top = `${startY}px`;
+    fragment.appendChild(petal);
+    petals.push({ el: petal, scale });
+  }
+
+  document.body.appendChild(fragment);
+
+  petals.forEach(({ el, scale }) => {
+    const swayX1 = (Math.random() - 0.5) * 90;
+    const swayX2 = swayX1 + (Math.random() - 0.5) * 110;
+    const fallY = Math.random() * 220 + 180;
+    const rot1 = Math.random() * 140 - 70;
+    const rot2 = rot1 + (Math.random() * 220 - 110);
+
+    const anim = el.animate([
+      { transform: `translate3d(-50%, -50%, 0) scale(${scale}) rotate(0deg)`, opacity: 1 },
+      { transform: `translate3d(calc(-50% + ${swayX1}px), calc(-50% + ${fallY * 0.45}px), 0) scale(${scale}) rotate(${rot1}deg)`, opacity: 0.9, offset: 0.5 },
+      { transform: `translate3d(calc(-50% + ${swayX2}px), calc(-50% + ${fallY}px), 0) scale(${scale * 0.85}) rotate(${rot2}deg)`, opacity: 0 }
+    ], {
+      duration: 1600 + Math.random() * 600,
+      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      fill: 'forwards'
+    });
+
+    anim.onfinish = () => el.remove();
+  });
+}
+
+function pokeRose(e) {
+  if (e) e.stopPropagation();
+  const roseEl = document.getElementById('interactive-rose');
+  if (!roseEl) return;
+
+  // Trigger playful wave & sway animation on the rose
+  roseEl.classList.remove('waving');
+  void roseEl.offsetWidth;
+  roseEl.classList.add('waving');
+
+  // Play a gentle musical note on tap
+  if (typeof audio !== 'undefined') {
+    audio.init();
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    audio.playNote(notes[rosePokeCount % notes.length]);
+  }
+  rosePokeCount++;
+
+  // Gently shower falling rose petals downward from the flower head (no text bubbles!)
+  const rect = roseEl.getBoundingClientRect();
+  const flowerHeadX = rect.left + rect.width / 2;
+  const flowerHeadY = rect.top + rect.height * 0.38;
+  spawnFallingRosePetals(flowerHeadX, flowerHeadY, 10);
+}
+
+function spawnSmoothPetals(startX, startY, count = 16) {
   const symbols = ['🌹', '🌸', '✨', '🤍', '🌹', '💖', '🍀', '🌸'];
   const fragment = document.createDocumentFragment();
   const particles = [];
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < count; i++) {
     const p = document.createElement('div');
     p.textContent = symbols[i % symbols.length];
     p.style.cssText = `
@@ -711,20 +778,17 @@ function acceptRose(e) {
   const floatingRoseBtn = document.getElementById('floating-rose-btn');
   const acceptBtn = document.getElementById('accept-rose-btn');
 
-  // Measure button position before fading
   const rect = acceptBtn
     ? acceptBtn.getBoundingClientRect()
     : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
   const startX = rect.left + rect.width / 2;
   const startY = rect.top + rect.height / 2;
 
-  // 1. Frame 1: Start the GPU opacity fade-out immediately with zero blocking work
   if (roseOverlay) roseOverlay.classList.remove('active');
   if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
 
-  // 2. Frame 2: Launch hardware-accelerated petals & audio right after fade starts
   requestAnimationFrame(() => {
-    spawnSmoothPetals(startX, startY);
+    spawnSmoothPetals(startX, startY, 16);
 
     showSongNoti(
       "Flower Accepted 🌹🤍",
@@ -740,7 +804,12 @@ function acceptRose(e) {
 
 function reopenRose() {
   const roseOverlay = document.getElementById('rose-overlay');
+  const roseEl = document.getElementById('interactive-rose');
+
   if (roseOverlay) {
+    roseOverlay.classList.remove('active');
+    if (roseEl) roseEl.classList.remove('waving');
+    void roseOverlay.offsetWidth;
     roseOverlay.classList.add('active');
   }
 
