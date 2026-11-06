@@ -660,6 +660,50 @@ modalCloseBtn.addEventListener('click', () => {
 /* ==========================================================
    9. FULL-SCREEN ROSE SURPRISE OVERLAY & FLOATING CORNER BUTTON
 ========================================================== */
+function spawnSmoothPetals(startX, startY) {
+  const symbols = ['🌹', '🌸', '✨', '🤍', '🌹', '💖', '🍀', '🌸'];
+  const fragment = document.createDocumentFragment();
+  const particles = [];
+
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    p.textContent = symbols[i % symbols.length];
+    p.style.cssText = `
+      position: fixed;
+      left: ${startX}px;
+      top: ${startY}px;
+      font-size: ${Math.floor(Math.random() * 12) + 20}px;
+      z-index: 3000;
+      pointer-events: none;
+      user-select: none;
+      will-change: transform, opacity;
+    `;
+    fragment.appendChild(p);
+    particles.push(p);
+  }
+
+  document.body.appendChild(fragment);
+
+  particles.forEach(p => {
+    const angle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 200 + 70;
+    const tx = Math.cos(angle) * distance;
+    const ty = -Math.abs(Math.sin(angle) * distance) - (Math.random() * 160 + 50);
+    const rot = Math.random() * 320 - 160;
+
+    const anim = p.animate([
+      { transform: 'translate3d(-50%, -50%, 0) scale(0.6) rotate(0deg)', opacity: 1 },
+      { transform: `translate3d(calc(-50% + ${tx}px), calc(-50% + ${ty}px), 0) scale(1.15) rotate(${rot}deg)`, opacity: 0 }
+    ], {
+      duration: 1150 + Math.random() * 300,
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      fill: 'forwards'
+    });
+
+    anim.onfinish = () => p.remove();
+  });
+}
+
 function acceptRose(e) {
   if (e) e.stopPropagation();
 
@@ -667,62 +711,31 @@ function acceptRose(e) {
   const floatingRoseBtn = document.getElementById('floating-rose-btn');
   const acceptBtn = document.getElementById('accept-rose-btn');
 
-  // 1. Immediately trigger the smooth 1.2s slow fade-out & show corner button
-  if (roseOverlay) roseOverlay.classList.remove('active');
-  if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
-
-  // 2. Play gentle chime chord
-  if (typeof audio !== 'undefined') {
-    audio.playChimeChord();
-  }
-
-  // 3. High-Visibility Petal Burst Animation (z-index: 3000 so it flies above the overlay)
+  // Measure button position before fading
   const rect = acceptBtn
     ? acceptBtn.getBoundingClientRect()
     : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
   const startX = rect.left + rect.width / 2;
   const startY = rect.top + rect.height / 2;
-  const symbols = ['🌹', '🌸', '✨', '🤍', '🌹', '💖', '🍀', '🌸'];
 
-  for (let i = 0; i < 22; i++) {
-    const particle = document.createElement('div');
-    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-    particle.style.position = 'fixed';
-    particle.style.left = `${startX}px`;
-    particle.style.top = `${startY}px`;
-    particle.style.fontSize = `${Math.floor(Math.random() * 16) + 20}px`;
-    particle.style.zIndex = '3000';
-    particle.style.pointerEvents = 'none';
-    particle.style.userSelect = 'none';
-    particle.style.transition = 'transform 1.4s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 1.4s ease-out';
+  // 1. Frame 1: Start the GPU opacity fade-out immediately with zero blocking work
+  if (roseOverlay) roseOverlay.classList.remove('active');
+  if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
 
-    document.body.appendChild(particle);
+  // 2. Frame 2: Launch hardware-accelerated petals & audio right after fade starts
+  requestAnimationFrame(() => {
+    spawnSmoothPetals(startX, startY);
 
-    const angle = Math.random() * Math.PI * 2;
-    const distance = Math.random() * 240 + 80;
-    const targetX = Math.cos(angle) * distance;
-    const targetY = -Math.abs(Math.sin(angle) * distance) - Math.random() * 180 - 60;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        particle.style.transform = `translate(${targetX}px, ${targetY}px) rotate(${Math.random() * 360 - 180}deg) scale(${Math.random() * 0.5 + 0.8})`;
-        particle.style.opacity = '0';
-      });
-    });
+    showSongNoti(
+      "Flower Accepted 🌹🤍",
+      "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
+    );
 
     setTimeout(() => {
-      particle.remove();
-    }, 1450);
-  }
-
-  // 4. Show on-screen notification toast for her (Your exact custom text preserved)
-  showSongNoti(
-    "Flower Accepted 🌹🤍",
-    "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
-  );
-
-  // 5. Send instant Telegram notification
-  sendTelegramAlert(`🌹 顾顾 accepted your special Rose ("ဟုတ်ကဲ့ပါ ပန်းလေးလက်ခံပါတယ်ရှင် 🌹✨") on the Letter Web!\n⏰ Time: ${new Date().toLocaleString()}`);
+      if (typeof audio !== 'undefined') audio.playChimeChord();
+      sendTelegramAlert(`🌹 顾顾 accepted your special Rose ("ဟုတ်ကဲ့ပါ ပန်းလေးလက်ခံပါတယ်ရှင် 🌹✨") on the Letter Web!\n⏰ Time: ${new Date().toLocaleString()}`);
+    }, 40);
+  });
 }
 
 function reopenRose() {
@@ -731,17 +744,15 @@ function reopenRose() {
     roseOverlay.classList.add('active');
   }
 
-  // Play gentle chime chord when reopening
-  if (typeof audio !== 'undefined') {
-    audio.playChimeChord();
-  }
+  requestAnimationFrame(() => {
+    showSongNoti(
+      "ကုကုအတွက် နှင်းဆီပန်းလေး 🌹✨",
+      "အတွေးမလွန်နဲ့တော့နော် ကုကုရေ... စိတ်အေးအေးလေးထားနော် ဘာမှမဖြစ်ဘူးနော် ကုကု အဆင်ပြေသွားမှာအကုန်လုံး..နော် 🥺🤍"
+    );
 
-  // Show on-screen notification toast (Your exact custom text preserved)
-  showSongNoti(
-    "ကုကုအတွက် နှင်းဆီပန်းလေး 🌹✨",
-    "အတွေးမလွန်နဲ့တော့နော် ကုကုရေ... စိတ်အေးအေးလေးထားနော် ဘာမှမဖြစ်ဘူးနော် ကုကု အဆင်ပြေသွားမှာအကုန်လုံး..နော် 🥺🤍"
-  );
-
-  // Send instant Telegram notification
-  sendTelegramAlert(`🌹 顾顾 tapped the glowing corner Rose button to reopen and look at your flower again! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
+    setTimeout(() => {
+      if (typeof audio !== 'undefined') audio.playChimeChord();
+      sendTelegramAlert(`🌹 顾顾 tapped the glowing corner Rose button to reopen and look at your flower again! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
+    }, 40);
+  });
 }
