@@ -676,23 +676,46 @@ function acceptRose(e) {
     audio.playChimeChord();
   }
 
-  // 3. Burst floating roses & hearts across the screen
-  const rect = acceptBtn ? acceptBtn.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0 };
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top;
-  const particles = ['🌹', '🤍', '🌸', '✨', '💖', '🌹'];
+  // 3. High-Visibility Petal Burst Animation (z-index: 3000 so it flies above the overlay)
+  const rect = acceptBtn
+    ? acceptBtn.getBoundingClientRect()
+    : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top + rect.height / 2;
+  const symbols = ['🌹', '🌸', '✨', '🤍', '🌹', '💖', '🍀', '🌸'];
 
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 22; i++) {
+    const particle = document.createElement('div');
+    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    particle.style.position = 'fixed';
+    particle.style.left = `${startX}px`;
+    particle.style.top = `${startY}px`;
+    particle.style.fontSize = `${Math.floor(Math.random() * 16) + 20}px`;
+    particle.style.zIndex = '3000';
+    particle.style.pointerEvents = 'none';
+    particle.style.userSelect = 'none';
+    particle.style.transition = 'transform 1.4s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 1.4s ease-out';
+
+    document.body.appendChild(particle);
+
+    const angle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 240 + 80;
+    const targetX = Math.cos(angle) * distance;
+    const targetY = -Math.abs(Math.sin(angle) * distance) - Math.random() * 180 - 60;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        particle.style.transform = `translate(${targetX}px, ${targetY}px) rotate(${Math.random() * 360 - 180}deg) scale(${Math.random() * 0.5 + 0.8})`;
+        particle.style.opacity = '0';
+      });
+    });
+
     setTimeout(() => {
-      textBubble(
-        particles[i % particles.length],
-        centerX + (Math.random() - 0.5) * 220,
-        centerY + (Math.random() - 0.5) * 60
-      );
-    }, i * 65);
+      particle.remove();
+    }, 1450);
   }
 
-  // 4. Show on-screen notification toast for her
+  // 4. Show on-screen notification toast for her (Your exact custom text preserved)
   showSongNoti(
     "Flower Accepted 🌹🤍",
     "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
@@ -713,7 +736,7 @@ function reopenRose() {
     audio.playChimeChord();
   }
 
-  // Show on-screen notification toast
+  // Show on-screen notification toast (Your exact custom text preserved)
   showSongNoti(
     "ကုကုအတွက် နှင်းဆီပန်းလေး 🌹✨",
     "အတွေးမလွန်နဲ့တော့နော် ကုကုရေ... စိတ်အေးအေးလေးထားနော် ဘာမှမဖြစ်ဘူးနော် ကုကု အဆင်ပြေသွားမှာအကုန်လုံး..နော် 🥺🤍"
