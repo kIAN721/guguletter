@@ -1519,3 +1519,29 @@ h1 {
   0% { transform: scale(0.95); opacity: 0.85; }
   100% { transform: scale(1.42); opacity: 0; }
 }
+
+/* Top-Right "X" Close Button */
+.rose-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFE4E6;
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 30;
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.rose-close-btn:hover {
+  background: rgba(225, 29, 72, 0.35);
+  transform: scale(1.08);
+}

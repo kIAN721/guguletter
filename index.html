@@ -366,9 +366,10 @@
     <button class="noti-close" onclick="closeSongNoti()">✕</button>
   </div>
 
-  <!-- 4. Special Rose Surprise Overlay (First Open + Re-openable) -->
-  <div id="rose-overlay" class="rose-overlay active">
+  <!-- 4. Special Rose Surprise Overlay (Opens after opening the letter, with X close button) -->
+  <div id="rose-overlay" class="rose-overlay">
     <div class="rose-card">
+      <button type="button" class="rose-close-btn" onclick="closeRoseOverlay()" title="Close">✕</button>
       <span class="rose-badge">🌹 A Little Rose For 顾顾 ✨</span>
       
       <!-- Interactive Blooming SVG Rose Illustration -->
@@ -404,42 +405,25 @@
 
           <!-- Growing Stem & Leaves -->
           <g class="svg-stem-group">
-            <!-- Curved Stem -->
             <path class="svg-stem" d="M100 225 Q95 170 100 115" stroke="url(#stemGrad)" stroke-width="6.5" stroke-linecap="round" fill="none" />
-            <!-- Thorns -->
             <path class="svg-leaf l-left" d="M97 165 L89 160 L98 157 Z" fill="#15803D" />
             <path class="svg-leaf l-right" d="M99 145 L107 140 L99 137 Z" fill="#15803D" />
-            <!-- Left Leaf -->
             <path class="svg-leaf l-left" d="M98 175 C65 172 45 148 52 135 C68 142 90 155 98 175 Z" fill="url(#stemGrad)" />
             <path class="svg-leaf l-left" d="M98 175 Q72 158 55 138" stroke="#86EFAC" stroke-width="1.2" fill="none" opacity="0.6" />
-            <!-- Right Leaf -->
             <path class="svg-leaf l-right" d="M100 152 C132 148 152 124 145 110 C128 118 108 132 100 152 Z" fill="url(#stemGrad)" />
             <path class="svg-leaf l-right" d="M100 152 Q125 135 142 114" stroke="#86EFAC" stroke-width="1.2" fill="none" opacity="0.6" />
           </g>
 
           <!-- Blooming Rose Flower Head -->
           <g class="svg-flower-head">
-            <!-- Back Cushion Petals -->
             <path class="svg-petal p-back" d="M100 115 C60 110 48 65 78 46 C92 38 108 38 122 46 C152 65 140 110 100 115 Z" fill="url(#petalDark)" />
-            
-            <!-- Outer Left Blooming Petal -->
             <path class="svg-petal p-outer-left" d="M100 118 C52 114 34 70 60 48 C78 34 96 54 100 84 Z" fill="url(#petalMid)" />
-            
-            <!-- Outer Right Blooming Petal -->
             <path class="svg-petal p-outer-right" d="M100 118 C148 114 166 70 140 48 C122 34 104 54 100 84 Z" fill="url(#petalMid)" />
-
-            <!-- Inner Left Velvet Petal -->
             <path class="svg-petal p-mid-left" d="M100 116 C65 108 55 68 78 52 C94 42 106 60 100 92 Z" fill="url(#petalLight)" />
-
-            <!-- Inner Right Velvet Petal -->
             <path class="svg-petal p-mid-right" d="M100 116 C135 108 145 68 122 52 C106 42 94 60 100 92 Z" fill="url(#petalLight)" />
-
-            <!-- Center Rosebud Core & Spiral -->
             <path class="svg-petal p-center" d="M100 115 C76 105 74 62 100 48 C126 62 124 105 100 115 Z" fill="url(#petalDark)" />
             <path class="svg-petal p-center" d="M100 112 C82 102 82 68 100 56 C118 68 118 102 100 112 Z" fill="url(#petalLight)" />
             <path class="svg-petal p-center" d="M88 68 C94 58 108 58 112 68 C115 76 104 84 96 78 C91 74 95 66 102 67" stroke="#FFF1F2" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.85" />
-
-            <!-- Green Sepals Cradling the Rose -->
             <path class="svg-sepal" d="M100 118 C82 122 66 112 60 98 C75 106 88 110 100 114 Z" fill="#15803D" />
             <path class="svg-sepal" d="M100 118 C118 122 134 112 140 98 C125 106 112 110 100 114 Z" fill="#15803D" />
             <path class="svg-sepal" d="M96 114 L100 126 L104 114 Z" fill="#14532D" />

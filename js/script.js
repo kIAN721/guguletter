@@ -187,6 +187,18 @@ function triggerOpen(e) {
         if (letterBox) letterBox.classList.add('fade-in');
         typewrite();
         initScratch();
+
+        // -> Trigger the Rose Surprise popup smoothly after she opens the letter!
+        setTimeout(() => {
+          const roseOverlay = document.getElementById('rose-overlay');
+          const roseEl = document.getElementById('interactive-rose');
+          if (roseOverlay) {
+            roseOverlay.classList.remove('active');
+            void roseOverlay.offsetWidth;
+            roseOverlay.classList.add('active');
+          }
+        }, 1200);
+
       }, 50);
     }, 600);
   }, 850);
@@ -707,12 +719,10 @@ function pokeRose(e) {
   const roseEl = document.getElementById('interactive-rose');
   if (!roseEl) return;
 
-  // Trigger playful wave & sway animation on the rose
   roseEl.classList.remove('waving');
   void roseEl.offsetWidth;
   roseEl.classList.add('waving');
 
-  // Play a gentle musical note on tap
   if (typeof audio !== 'undefined') {
     audio.init();
     const notes = [523.25, 659.25, 783.99, 1046.50];
@@ -720,7 +730,6 @@ function pokeRose(e) {
   }
   rosePokeCount++;
 
-  // Gently shower falling rose petals downward from the flower head (no text bubbles!)
   const rect = roseEl.getBoundingClientRect();
   const flowerHeadX = rect.left + rect.width / 2;
   const flowerHeadY = rect.top + rect.height * 0.38;
@@ -800,6 +809,17 @@ function acceptRose(e) {
       sendTelegramAlert(`🌹 顾顾 accepted your special Rose ("ဟုတ်ကဲ့ပါ ပန်းလေးလက်ခံပါတယ်ရှင် 🌹✨") on the Letter Web!\n⏰ Time: ${new Date().toLocaleString()}`);
     }, 40);
   });
+}
+
+function closeRoseOverlay(e) {
+  if (e) e.stopPropagation();
+  const roseOverlay = document.getElementById('rose-overlay');
+  const floatingRoseBtn = document.getElementById('floating-rose-btn');
+
+  if (roseOverlay) roseOverlay.classList.remove('active');
+  if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
+
+  sendTelegramAlert(`🌹 顾顾 closed your Rose overlay using the X button on the Letter Web.\n⏰ Time: ${new Date().toLocaleString()}`);
 }
 
 function reopenRose() {
