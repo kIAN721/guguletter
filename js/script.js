@@ -698,7 +698,7 @@ function toggleRoseVoice(e) {
     roseVoicePlayer.play().then(() => {
       if (voicePlayBtn) voicePlayBtn.textContent = '⏸️';
       if (voicePlayerCard) voicePlayerCard.classList.add('playing');
-      if (voiceStatusLabel) voiceStatusLabel.textContent = '🔊 Playing ဝမ်ဝမ်း၏ အသံလေး... 🎧';
+      if (voiceStatusLabel) voiceStatusLabel.textContent = '🔊 Playing voice message from ဝမ်ဝမ်း... 🎧';
 
       // Reveal the Burmese translation ONLY after she plays the voice recording!
       if (voiceReveal && !voiceReveal.classList.contains('show')) {
@@ -737,7 +737,7 @@ if (roseVoicePlayer) {
   roseVoicePlayer.addEventListener('ended', () => {
     if (voicePlayBtn) voicePlayBtn.textContent = '▶️';
     if (voicePlayerCard) voicePlayerCard.classList.remove('playing');
-    if (voiceStatusLabel) voiceStatusLabel.textContent = '🎙️ Replay ဝမ်ဝမ်း၏ အသံလေး 🌹🎧';
+    if (voiceStatusLabel) voiceStatusLabel.textContent = '🎙️ Replay voice message from ဝမ်ဝမ်း... 🌹🎧';
     if (voiceProgressBar) voiceProgressBar.value = 0;
   });
 }
@@ -883,7 +883,7 @@ function acceptRose(e) {
 
     showSongNoti(
       "Flower Accepted 🌹🤍",
-      "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
+      "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
     );
 
     setTimeout(() => {
