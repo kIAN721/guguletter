@@ -1124,7 +1124,7 @@ h1 {
 }
 
 /* ==========================================================
-   9. FULL-SCREEN ROSE SURPRISE OVERLAY & BLOOMING SVG ROSE
+   9. FULL-SCREEN ROSE SURPRISE OVERLAY & VOICE PLAYER
 ========================================================== */
 .rose-overlay {
   position: fixed;
@@ -1134,7 +1134,6 @@ h1 {
   height: 100dvh;
   background: radial-gradient(circle at 50% 35%, rgba(65, 12, 30, 0.97) 0%, rgba(28, 7, 16, 0.99) 60%, rgba(12, 4, 8, 1) 100%);
   z-index: 2500;
-  /* Make the overlay itself scrollable and prevent background scroll chaining */
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -1161,7 +1160,6 @@ h1 {
   padding: 24px 12px 20px;
   max-width: 580px;
   width: 100%;
-  /* margin: auto centers it vertically when short, and allows full scrolling when tall! */
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -1172,14 +1170,6 @@ h1 {
   will-change: transform;
   transform: scale(0.94) translateY(12px);
   transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.rose-card::-webkit-scrollbar {
-  width: 4px;
-}
-.rose-card::-webkit-scrollbar-thumb {
-  background: rgba(251, 113, 133, 0.4);
-  border-radius: 10px;
 }
 
 .rose-overlay.active .rose-card {
@@ -1250,11 +1240,6 @@ h1 {
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  transition: box-shadow 0.4s ease;
-}
-
-.rose-illustration.playing-voice {
-  box-shadow: 0 0 75px rgba(244, 63, 94, 0.85), 0 0 30px rgba(255, 228, 230, 0.45);
 }
 
 @media (min-width: 600px) {
@@ -1278,7 +1263,6 @@ h1 {
   to { transform: rotate(360deg); }
 }
 
-/* SVG Rose Plant Container */
 .svg-rose-plant {
   width: 150px;
   height: 180px;
@@ -1296,7 +1280,6 @@ h1 {
   }
 }
 
-/* Waving Dance Animation When She Taps the Rose */
 .rose-illustration.waving .svg-rose-plant {
   animation: roseWaveDance 0.9s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
 }
@@ -1315,7 +1298,6 @@ h1 {
   100% { transform: rotate(0deg) scale(1); }
 }
 
-/* Stem Growth Animation */
 .svg-stem {
   stroke-dasharray: 140;
   stroke-dashoffset: 140;
@@ -1329,7 +1311,6 @@ h1 {
   to { stroke-dashoffset: 0; }
 }
 
-/* Leaf Unfurling Animation */
 .svg-leaf {
   opacity: 0;
   transform-box: fill-box;
@@ -1351,7 +1332,6 @@ h1 {
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-/* Layered Rose Petal Blooming Sequence */
 .svg-petal,
 .svg-sepal {
   opacity: 0;
@@ -1411,7 +1391,6 @@ h1 {
   100% { opacity: 1; transform: scale(1) rotate(4deg); }
 }
 
-/* Custom Falling Velvet Rose Petal Shape (Spawned on Tap) */
 .falling-rose-petal {
   position: fixed;
   width: 16px;
@@ -1462,7 +1441,7 @@ h1 {
   font-size: 1.3rem;
   color: #FFF1F2;
   line-height: 1.5;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   text-shadow: 0 2px 16px rgba(225, 29, 72, 0.5);
 }
 
@@ -1472,13 +1451,132 @@ h1 {
   }
 }
 
-/* Hidden Translation Container (Reveals smoothly when she taps the rose) */
-/* Hidden Translation Container (Reveals smoothly when she taps the rose) */
+/* ==========================================================
+   VISIBLE VOICE RECORDING PLAYER CARD
+========================================================== */
+.voice-player-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 460px;
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.25) 0%, rgba(136, 19, 55, 0.35) 100%);
+  border: 1.5px solid rgba(251, 113, 133, 0.55);
+  border-radius: 20px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3), 0 0 20px rgba(225, 29, 72, 0.25);
+  flex-shrink: 0;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.voice-player-card.playing {
+  border-color: #FDA4AF;
+  box-shadow: 0 10px 32px rgba(225, 29, 72, 0.5), 0 0 28px rgba(244, 63, 94, 0.45);
+}
+
+.voice-play-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+  border: 1.5px solid #FDA4AF;
+  color: #FFFFFF;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.voice-play-btn:hover {
+  transform: scale(1.08);
+}
+
+.voice-play-btn:active {
+  transform: scale(0.94);
+}
+
+.voice-player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.voice-player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.voice-status-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFE4E6;
+  line-height: 1.3;
+}
+
+/* Animated Soundwave Bars inside Voice Player */
+.voice-wave-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+  opacity: 0.4;
+}
+
+.voice-wave-bars span {
+  width: 3px;
+  height: 5px;
+  background: #FDA4AF;
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.voice-player-card.playing .voice-wave-bars {
+  opacity: 1;
+}
+
+.voice-player-card.playing .voice-wave-bars span:nth-child(1) {
+  animation: soundWave 0.6s infinite ease-in-out 0s;
+}
+.voice-player-card.playing .voice-wave-bars span:nth-child(2) {
+  animation: soundWave 0.6s infinite ease-in-out 0.15s;
+}
+.voice-player-card.playing .voice-wave-bars span:nth-child(3) {
+  animation: soundWave 0.6s infinite ease-in-out 0.3s;
+}
+.voice-player-card.playing .voice-wave-bars span:nth-child(4) {
+  animation: soundWave 0.6s infinite ease-in-out 0.45s;
+}
+
+@keyframes soundWave {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+
+.voice-progress-bar {
+  width: 100%;
+  height: 5px;
+  accent-color: #FB7185;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   HIDDEN TRANSLATION BOX (Reveals ONLY after playing voice)
+========================================================== */
 .rose-voice-reveal {
   display: none;
   width: 100%;
   flex-shrink: 0;
-  margin-top: 4px;
+  margin-top: 2px;
   margin-bottom: 18px;
   animation: revealVoiceBox 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
@@ -1514,7 +1612,7 @@ h1 {
   font-size: 13.5px;
   color: #FFE4E6;
   line-height: 1.85;
-  margin-bottom: 0;
+  margin: 0;
   background: rgba(255, 255, 255, 0.09);
   border: 1.5px solid rgba(251, 113, 133, 0.35);
   border-radius: 20px;
@@ -1545,7 +1643,7 @@ h1 {
   cursor: pointer;
   box-shadow: 0 10px 28px rgba(225, 29, 72, 0.55), 0 0 20px rgba(244, 63, 94, 0.4);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .accept-rose-btn:hover {
