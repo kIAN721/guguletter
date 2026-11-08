@@ -366,13 +366,13 @@
     <button class="noti-close" onclick="closeSongNoti()">✕</button>
   </div>
 
-  <!-- 4. Special Rose Surprise Overlay (Opens after opening the letter, with Voice & Hidden Translation) -->
+    <!-- 4. Special Rose Surprise Overlay (With Visible Voice Player & Revealable Translation) -->
   <div id="rose-overlay" class="rose-overlay">
     <div class="rose-card">
       <button type="button" class="rose-close-btn" onclick="closeRoseOverlay(event)" title="Close">✕</button>
       <span class="rose-badge">🌹 A Little Rose For 顾顾 ✨</span>
       
-      <!-- Interactive Blooming SVG Rose Illustration -->
+      <!-- Interactive Blooming SVG Rose Illustration (Tap for falling petals!) -->
       <div class="rose-illustration" id="interactive-rose" onclick="pokeRose(event)" title="Tap the rose! 🌹">
         <div class="rose-glow-ring"></div>
         <span class="sparkle s-1">✨</span>
@@ -430,19 +430,36 @@
           </g>
         </svg>
 
-        <span id="rose-tap-hint" class="rose-tap-hint">နှင်းဆီပန်းလေးကို နှိပ်ကြည့်နော် 🌹🎧👆</span>
+        <span class="rose-tap-hint">Tap the rose 🌹👆</span>
       </div>
 
-            <!-- Title (Changes automatically when she taps the rose & voice plays) -->
-      <h3 id="rose-title" class="rose-title">
+      <!-- Main Title -->
+      <h3 class="rose-title">
         ဒီနေ့ ကုကုအတွက်နှင်းဆီပန်းလေးတစ်ပွင့်ပါဟီးးး🌹🥺
       </h3>
 
-      <!-- Always Visible Burmese Message / Translation Box -->
-      <div id="rose-message-box" class="rose-message-box">
-        <span id="translation-badge" class="translation-badge">
-          🎧 ဝမ်ဝမ်းပြောတာ နားမလည်မှာစိုးလို့ မြန်မာလိုစာသားလေးပါ 👇
-        </span>
+      <!-- ALWAYS VISIBLE VOICE RECORDING PLAYER BAR -->
+      <div id="voice-player-card" class="voice-player-card">
+        <button type="button" id="voice-play-btn" class="voice-play-btn" onclick="toggleRoseVoice(event)">
+          ▶️
+        </button>
+        <div class="voice-player-info">
+          <div class="voice-player-header">
+            <span id="voice-status-label" class="voice-status-label">🎙️ Voice Message from ဝမ်ဝမ်း (Tap to listen)</span>
+            <span class="voice-wave-bars">
+              <span></span><span></span><span></span><span></span>
+            </span>
+          </div>
+          <input type="range" id="voice-progress-bar" class="voice-progress-bar" value="0" min="0" max="100">
+        </div>
+        <audio id="rose-voice-player" src="audio/voice.mp3" preload="auto"></audio>
+      </div>
+
+      <!-- HIDDEN TRANSLATION (Appears ONLY after she plays the recording) -->
+      <div id="rose-voice-reveal" class="rose-voice-reveal">
+        <p class="rose-voice-subtitle">
+          ကုကု နားမလည်မှာစိုးလို့ အောက်မှာ မြန်မာလိုထည့်ထားတယ်နော် 😭 အရင်ကစာအတိုင်းပါပဲ ဒါမဲ့ ဒီလိုလေးပြောလိုက်ရင် ပိုကောင်းမလားလို့လေ ဟီးးး🥺
+        </p>
         <p class="rose-message">
           “ရည်းစားမဟုတ်တဲ့ ကုကုလေးရေ…. အတွေးတွေအရမ်းများပြီးစိတ်ပင်ပန်းနေရတယ်မလားဟင်။အများကြီးမတွေးပါနဲ့တော့နော်။ ကုကုအကောင်းကြိုးစားပြီးနေနေတယ်နော်၊ ဝမ်ဝမ်းသိတယ်နော် ကုကုလည်း ကိုယ်တိုင်သိတယ်နော်၊ အကုန်လုံးအဆင်ပြေသွားမှာနော် ကုကု။ လိုအပ်တဲ့အခါလည်း ဝမ်ဝမ်းဘေးမှာအမြဲရှိနေပါမယ်နော်။ အတွေးလွန်တာကလေ ပုံမှန်ပဲနော်ကုကု။ အဲ့ဒါကလေဘာမှမဖြစ်ဘူးနော်။ ဒါပေမဲ့ခုတော့ စိတ်ညစ်စရာအတွေးတွေကိုခဏဖယ်ထားပြီး လက်ရှိလုပ်စရာရှိတာလေးကိုပဲ လုပ်လိုက်နော်။ ဒါတွေအကုန်ကုကုသိပြီးသားဆိုလည်းသိပါတယ်နော်။ ကဲအများကြီးမပြောတော့ပါဘူးနော်။ ကုကုရေ ဒီနေ့လည်း ပျော်ပျော်ရွှင်ရွှင်နဲ့ကြိုးစားလိုက်ပါဦးနော်🍀✨💞”
         </p>
@@ -451,17 +468,9 @@
       <button type="button" id="accept-rose-btn" class="accept-rose-btn" onclick="acceptRose(event)">
         ဟုတ်ကဲ့ပါ ပန်းလေးလက်ခံပါတယ်ရှင် 🌹✨
       </button>
-
-      <!-- Audio Element for Your Voice Recording -->
-      <audio id="rose-voice-player" src="audio/voice.mp3" preload="auto"></audio>
     </div>
   </div>
 
-  <!-- 5. Noticeable Glowing Floating Rose Button (Bottom-Right Corner) -->
-  <button type="button" id="floating-rose-btn" class="floating-rose-btn" onclick="reopenRose()" title="Open your rose again 🌹">
-    <span class="floating-rose-ring"></span>
-    <span class="floating-rose-icon">🌹</span>
-  </button>
 
   <script src="js/script.js"></script>
 </body>
