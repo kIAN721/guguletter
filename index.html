@@ -366,7 +366,7 @@
     <button class="noti-close" onclick="closeSongNoti()">✕</button>
   </div>
 
-  <!-- 4. Special Rose Surprise Overlay (With Visible Voice Player & Revealable Translation) -->
+  <!-- 4. Special Rose Surprise Overlay (Opens after opening the letter, with Voice & Hidden Translation) -->
   <div id="rose-overlay" class="rose-overlay">
     <div class="rose-card">
       <button type="button" class="rose-close-btn" onclick="closeRoseOverlay(event)" title="Close">✕</button>
@@ -433,10 +433,8 @@
         <span class="rose-tap-hint">Tap the rose 🌹👆</span>
       </div>
 
-      <!-- Main Title -->
-      <h3 class="rose-title">
-        ဒီနေ့ ကုကုအတွက်နှင်းဆီပန်းလေးတစ်ပွင့်ပါဟီးးး🌹🥺
-      </h3>
+      <!-- Initial Main Title -->
+      <h3 class="rose-title">ဒီနေ့ ကုကုအတွက်နှင်းဆီပန်းလေးတစ်ပွင့်ပါဟီးးး🌹🥺</h3>
 
       <!-- ALWAYS VISIBLE VOICE RECORDING PLAYER BAR -->
       <div id="voice-player-card" class="voice-player-card">
@@ -458,7 +456,7 @@
       <!-- HIDDEN TRANSLATION (Appears ONLY after she plays the recording) -->
       <div id="rose-voice-reveal" class="rose-voice-reveal">
         <p class="rose-voice-subtitle">
-          ကုကု နားမလည်မှာစိုးလို့ အောက်မှာ မြန်မာလိုထည့်ထားတယ်နော် 😭 အရင်ကစာအတိုင်းပါပဲ ဒါမဲ့ ဒီလိုလေးပြောလိုက်ရင် ပိုကောင်းမလားလို့လေ ဟီးးး🥺
+          ကုကု နားမလည်မှာစိုးလို့ အောက်မှာ မြန်မာလိုထည့်ထားတယ်နော် 😭 အရင်ကစာအတိုင်းပါပဲ ဒါမဲ့ ဒီလိုလေးပြောလိုက်ရင် ပိုကောင်းမလားလို့လေ ဟီးးး🥺
         </p>
         <p class="rose-message">
           “ရည်းစားမဟုတ်တဲ့ ကုကုလေးရေ…. အတွေးတွေအရမ်းများပြီးစိတ်ပင်ပန်းနေရတယ်မလားဟင်။အများကြီးမတွေးပါနဲ့တော့နော်။ ကုကုအကောင်းကြိုးစားပြီးနေနေတယ်နော်၊ ဝမ်ဝမ်းသိတယ်နော် ကုကုလည်း ကိုယ်တိုင်သိတယ်နော်၊ အကုန်လုံးအဆင်ပြေသွားမှာနော် ကုကု။ လိုအပ်တဲ့အခါလည်း ဝမ်ဝမ်းဘေးမှာအမြဲရှိနေပါမယ်နော်။ အတွေးလွန်တာကလေ ပုံမှန်ပဲနော်ကုကု။ အဲ့ဒါကလေဘာမှမဖြစ်ဘူးနော်။ ဒါပေမဲ့ခုတော့ စိတ်ညစ်စရာအတွေးတွေကိုခဏဖယ်ထားပြီး လက်ရှိလုပ်စရာရှိတာလေးကိုပဲ လုပ်လိုက်နော်။ ဒါတွေအကုန်ကုကုသိပြီးသားဆိုလည်းသိပါတယ်နော်။ ကဲအများကြီးမပြောတော့ပါဘူးနော်။ ကုကုရေ ဒီနေ့လည်း ပျော်ပျော်ရွှင်ရွှင်နဲ့ကြိုးစားလိုက်ပါဦးနော်🍀✨💞”
@@ -471,11 +469,6 @@
     </div>
   </div>
 
-  <!-- 5. Noticeable Glowing Floating Rose Button (Bottom-Right Corner) -->
-  <button type="button" id="floating-rose-btn" class="floating-rose-btn" onclick="reopenRose()" title="Open your rose again 🌹">
-    <span class="floating-rose-ring"></span>
-    <span class="floating-rose-icon">🌹</span>
-  </button>
 
   <script src="js/script.js"></script>
 </body>
