@@ -1134,7 +1134,6 @@ h1 {
   height: 100dvh;
   background: radial-gradient(circle at 50% 35%, rgba(65, 12, 30, 0.97) 0%, rgba(28, 7, 16, 0.99) 60%, rgba(12, 4, 8, 1) 100%);
   z-index: 2500;
-  /* Make the overlay itself scrollable and prevent background scroll chaining */
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -1161,7 +1160,6 @@ h1 {
   padding: 24px 12px 20px;
   max-width: 580px;
   width: 100%;
-  /* margin: auto centers it vertically when short, and allows full scrolling when tall! */
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -1172,14 +1170,6 @@ h1 {
   will-change: transform;
   transform: scale(0.94) translateY(12px);
   transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.rose-card::-webkit-scrollbar {
-  width: 4px;
-}
-.rose-card::-webkit-scrollbar-thumb {
-  background: rgba(251, 113, 133, 0.4);
-  border-radius: 10px;
 }
 
 .rose-overlay.active .rose-card {
@@ -1457,70 +1447,81 @@ h1 {
   100% { opacity: 1; transform: scale(1.25); }
 }
 
+/* Title & Always-Visible Message / Translation Box */
 .rose-title {
   font-family: Georgia, serif;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: #FFF1F2;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  line-height: 1.55;
+  margin-bottom: 14px;
   text-shadow: 0 2px 16px rgba(225, 29, 72, 0.5);
+  transition: all 0.35s ease;
 }
 
 @media (min-width: 600px) {
   .rose-title {
-    font-size: 1.55rem;
+    font-size: 1.45rem;
   }
 }
 
-/* Hidden Translation Container (Reveals smoothly when she taps the rose) */
-/* Hidden Translation Container (Reveals smoothly when she taps the rose) */
-.rose-voice-reveal {
-  display: none;
-  width: 100%;
-  flex-shrink: 0;
-  margin-top: 4px;
-  margin-bottom: 18px;
-  animation: revealVoiceBox 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.rose-voice-reveal.show {
-  display: block;
-}
-
-@keyframes revealVoiceBox {
-  0% {
-    opacity: 0;
-    transform: translateY(14px) scale(0.97);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.rose-voice-subtitle {
-  font-size: 13px;
-  font-weight: 700;
+.rose-title.voice-active-title {
+  font-size: 1.05rem;
   color: #FDA4AF;
   background: rgba(225, 29, 72, 0.22);
-  border: 1px dashed rgba(251, 113, 133, 0.5);
-  border-radius: 14px;
-  padding: 10px 14px;
+  border: 1px dashed rgba(251, 113, 133, 0.55);
+  border-radius: 16px;
+  padding: 12px 16px;
   line-height: 1.75;
-  margin-bottom: 12px;
+}
+
+@media (min-width: 600px) {
+  .rose-title.voice-active-title {
+    font-size: 1.15rem;
+  }
+}
+
+.rose-message-box {
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: 18px;
+  transition: transform 0.35s ease;
+}
+
+.translation-badge {
+  display: none;
+  background: rgba(244, 63, 94, 0.28);
+  border: 1px solid rgba(251, 113, 133, 0.5);
+  color: #FFE4E6;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  margin-bottom: 10px;
+}
+
+.rose-message-box.translation-mode .translation-badge {
+  display: inline-block;
+  animation: pulse 1.8s infinite;
 }
 
 .rose-message {
   font-size: 13.5px;
   color: #FFE4E6;
   line-height: 1.85;
-  margin-bottom: 0;
+  margin: 0;
   background: rgba(255, 255, 255, 0.09);
   border: 1.5px solid rgba(251, 113, 133, 0.35);
   border-radius: 20px;
   padding: 16px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
   text-align: left;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.rose-message-box.translation-mode .rose-message {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: #FB7185;
+  box-shadow: 0 0 28px rgba(225, 29, 72, 0.4);
 }
 
 @media (min-width: 600px) {
