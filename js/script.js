@@ -735,7 +735,8 @@ function spawnFallingRosePetals(centerX, centerY, count = 10) {
 function pokeRose(e) {
   if (e) e.stopPropagation();
   const roseEl = document.getElementById('interactive-rose');
-  const voiceReveal = document.getElementById('rose-voice-reveal');
+  const roseTitle = document.getElementById('rose-title');
+  const msgBox = document.getElementById('rose-message-box');
   const tapHint = document.getElementById('rose-tap-hint');
   if (!roseEl) return;
 
@@ -750,12 +751,13 @@ function pokeRose(e) {
   const flowerHeadY = rect.top + rect.height * 0.38;
   spawnFallingRosePetals(flowerHeadX, flowerHeadY, 12);
 
-  // 3. Reveal the hidden Burmese title & translation box and smoothly scroll it into view!
-  if (voiceReveal) {
-    voiceReveal.classList.add('show');
-    setTimeout(() => {
-      voiceReveal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 120);
+  // 3. Swap the title & highlight the visible Burmese text as the voice translation
+  if (roseTitle) {
+    roseTitle.textContent = "ကုကု နားမလည်မှာစိုးလို့ အောက်မှာ မြန်မာလိုထည့်ထားတယ်နော် 😭 အရင်ကစာအတိုင်းပါပဲ ဒါမဲ့ ဒီလိုလေးပြောလိုက်ရင် ပိုကောင်းမလားလို့လေ ဟီးးး🥺";
+    roseTitle.classList.add('voice-active-title');
+  }
+  if (msgBox) {
+    msgBox.classList.add('translation-mode');
   }
 
   // 4. Pause background chimes & MP3 music so your voice recording is crystal clear
@@ -778,6 +780,7 @@ function pokeRose(e) {
   // 6. Send instant Telegram alert
   sendTelegramAlert(`🎙️🌹 顾顾 tapped the Rose and is listening to your voice message (voice.mp3) right now! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
 }
+
 
 function acceptRose(e) {
   if (e) e.stopPropagation();
