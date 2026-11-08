@@ -191,11 +191,11 @@ function triggerOpen(e) {
         // -> Trigger the Rose Surprise popup smoothly after she opens the letter!
         setTimeout(() => {
           const roseOverlay = document.getElementById('rose-overlay');
-          const roseEl = document.getElementById('interactive-rose');
           if (roseOverlay) {
             roseOverlay.classList.remove('active');
             void roseOverlay.offsetWidth;
             roseOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Locks background scrolling
           }
         }, 1200);
 
@@ -670,9 +670,27 @@ modalCloseBtn.addEventListener('click', () => {
 });
 
 /* ==========================================================
-   9. FULL-SCREEN ROSE SURPRISE OVERLAY & INTERACTIVE BLOOMING ROSE
+   9. FULL-SCREEN ROSE SURPRISE OVERLAY & VOICE + BLOOMING ROSE
 ========================================================== */
-let rosePokeCount = 0;
+const roseVoicePlayer = document.getElementById('rose-voice-player');
+
+if (roseVoicePlayer) {
+  roseVoicePlayer.addEventListener('ended', () => {
+    const roseEl = document.getElementById('interactive-rose');
+    const tapHint = document.getElementById('rose-tap-hint');
+    if (roseEl) roseEl.classList.remove('playing-voice');
+    if (tapHint) tapHint.textContent = "နောက်တစ်ခေါက် ပြန်နားထောင်မယ်ဆို နှိပ်နော် 🌹🎧";
+  });
+}
+
+function stopRoseVoice() {
+  if (roseVoicePlayer && !roseVoicePlayer.paused) {
+    roseVoicePlayer.pause();
+    roseVoicePlayer.currentTime = 0;
+  }
+  const roseEl = document.getElementById('interactive-rose');
+  if (roseEl) roseEl.classList.remove('playing-voice');
+}
 
 function spawnFallingRosePetals(centerX, centerY, count = 10) {
   const fragment = document.createDocumentFragment();
@@ -717,71 +735,54 @@ function spawnFallingRosePetals(centerX, centerY, count = 10) {
 function pokeRose(e) {
   if (e) e.stopPropagation();
   const roseEl = document.getElementById('interactive-rose');
+  const voiceReveal = document.getElementById('rose-voice-reveal');
+  const tapHint = document.getElementById('rose-tap-hint');
   if (!roseEl) return;
 
+  // 1. Trigger playful wave & sway animation on the rose
   roseEl.classList.remove('waving');
   void roseEl.offsetWidth;
   roseEl.classList.add('waving');
 
-  if (typeof audio !== 'undefined') {
-    audio.init();
-    const notes = [523.25, 659.25, 783.99, 1046.50];
-    audio.playNote(notes[rosePokeCount % notes.length]);
-  }
-  rosePokeCount++;
-
+  // 2. Shower falling velvet rose petals downward from the flower head
   const rect = roseEl.getBoundingClientRect();
   const flowerHeadX = rect.left + rect.width / 2;
   const flowerHeadY = rect.top + rect.height * 0.38;
-  spawnFallingRosePetals(flowerHeadX, flowerHeadY, 10);
-}
+  spawnFallingRosePetals(flowerHeadX, flowerHeadY, 12);
 
-function spawnSmoothPetals(startX, startY, count = 16) {
-  const symbols = ['🌹', '🌸', '✨', '🤍', '🌹', '💖', '🍀', '🌸'];
-  const fragment = document.createDocumentFragment();
-  const particles = [];
-
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('div');
-    p.textContent = symbols[i % symbols.length];
-    p.style.cssText = `
-      position: fixed;
-      left: ${startX}px;
-      top: ${startY}px;
-      font-size: ${Math.floor(Math.random() * 12) + 20}px;
-      z-index: 3000;
-      pointer-events: none;
-      user-select: none;
-      will-change: transform, opacity;
-    `;
-    fragment.appendChild(p);
-    particles.push(p);
+  // 3. Reveal the hidden Burmese title & translation box and smoothly scroll it into view!
+  if (voiceReveal) {
+    voiceReveal.classList.add('show');
+    setTimeout(() => {
+      voiceReveal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 120);
   }
 
-  document.body.appendChild(fragment);
+  // 4. Pause background chimes & MP3 music so your voice recording is crystal clear
+  if (typeof audio !== 'undefined' && audio.isPlaying) {
+    audio.stop();
+  }
+  if (typeof pauseMp3Player === 'function') {
+    pauseMp3Player();
+  }
 
-  particles.forEach(p => {
-    const angle = Math.random() * Math.PI * 2;
-    const distance = Math.random() * 200 + 70;
-    const tx = Math.cos(angle) * distance;
-    const ty = -Math.abs(Math.sin(angle) * distance) - (Math.random() * 160 + 50);
-    const rot = Math.random() * 320 - 160;
+  // 5. Play your voice.mp3 recording
+  if (roseVoicePlayer) {
+    roseVoicePlayer.currentTime = 0;
+    roseVoicePlayer.play().then(() => {
+      roseEl.classList.add('playing-voice');
+      if (tapHint) tapHint.textContent = "🔊 ဝမ်ဝမ်းအသံလေး ဖွင့်နေပါတယ်နော်... 🌹🎧";
+    }).catch(err => console.log("Voice playback error (check audio/voice.mp3):", err));
+  }
 
-    const anim = p.animate([
-      { transform: 'translate3d(-50%, -50%, 0) scale(0.6) rotate(0deg)', opacity: 1 },
-      { transform: `translate3d(calc(-50% + ${tx}px), calc(-50% + ${ty}px), 0) scale(1.15) rotate(${rot}deg)`, opacity: 0 }
-    ], {
-      duration: 1150 + Math.random() * 300,
-      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-      fill: 'forwards'
-    });
-
-    anim.onfinish = () => p.remove();
-  });
+  // 6. Send instant Telegram alert
+  sendTelegramAlert(`🎙️🌹 顾顾 tapped the Rose and is listening to your voice message (voice.mp3) right now! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
 }
 
 function acceptRose(e) {
   if (e) e.stopPropagation();
+  stopRoseVoice();
+  document.body.style.overflow = ''; // Unlock background letter scroll
 
   const roseOverlay = document.getElementById('rose-overlay');
   const floatingRoseBtn = document.getElementById('floating-rose-btn');
@@ -813,13 +814,14 @@ function acceptRose(e) {
 
 function closeRoseOverlay(e) {
   if (e) e.stopPropagation();
+  stopRoseVoice();
+  document.body.style.overflow = ''; // Unlock background letter scroll
+
   const roseOverlay = document.getElementById('rose-overlay');
   const floatingRoseBtn = document.getElementById('floating-rose-btn');
 
   if (roseOverlay) roseOverlay.classList.remove('active');
   if (floatingRoseBtn) floatingRoseBtn.classList.add('visible');
-
-  // sendTelegramAlert(`🌹 顾顾 closed your Rose overlay using the X button on the Letter Web.\n⏰ Time: ${new Date().toLocaleString()}`);
 }
 
 function reopenRose() {
@@ -831,6 +833,8 @@ function reopenRose() {
     if (roseEl) roseEl.classList.remove('waving');
     void roseOverlay.offsetWidth;
     roseOverlay.classList.add('active');
+    roseOverlay.scrollTop = 0;
+    document.body.style.overflow = 'hidden'; // Lock background scroll while rose is open
   }
 
   requestAnimationFrame(() => {
