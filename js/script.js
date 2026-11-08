@@ -670,16 +670,75 @@ modalCloseBtn.addEventListener('click', () => {
 });
 
 /* ==========================================================
-   9. FULL-SCREEN ROSE SURPRISE OVERLAY & VOICE + BLOOMING ROSE
+   9. FULL-SCREEN ROSE SURPRISE OVERLAY & VOICE PLAYER
 ========================================================== */
+let rosePokeCount = 0;
 const roseVoicePlayer = document.getElementById('rose-voice-player');
+const voicePlayBtn = document.getElementById('voice-play-btn');
+const voiceProgressBar = document.getElementById('voice-progress-bar');
+const voicePlayerCard = document.getElementById('voice-player-card');
+const voiceStatusLabel = document.getElementById('voice-status-label');
 
+// Play / Pause the visible Voice Recording Player
+function toggleRoseVoice(e) {
+  if (e) e.stopPropagation();
+  if (!roseVoicePlayer) return;
+
+  const voiceReveal = document.getElementById('rose-voice-reveal');
+
+  if (roseVoicePlayer.paused) {
+    // Pause background chimes & MP3 music so your voice recording is crystal clear
+    if (typeof audio !== 'undefined' && audio.isPlaying) {
+      audio.stop();
+    }
+    if (typeof pauseMp3Player === 'function') {
+      pauseMp3Player();
+    }
+
+    roseVoicePlayer.play().then(() => {
+      if (voicePlayBtn) voicePlayBtn.textContent = '⏸️';
+      if (voicePlayerCard) voicePlayerCard.classList.add('playing');
+      if (voiceStatusLabel) voiceStatusLabel.textContent = '🔊 Playing ဝမ်ဝမ်း၏ အသံလေး... 🎧';
+
+      // Reveal the Burmese translation ONLY after she plays the voice recording!
+      if (voiceReveal && !voiceReveal.classList.contains('show')) {
+        voiceReveal.classList.add('show');
+        setTimeout(() => {
+          voiceReveal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 150);
+      }
+
+      sendTelegramAlert(`🎙️🌹 顾顾 pressed Play on your voice recording (voice.mp3) inside the Rose popup! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
+    }).catch(err => console.log("Voice playback error (make sure audio/voice.mp3 exists):", err));
+  } else {
+    roseVoicePlayer.pause();
+    if (voicePlayBtn) voicePlayBtn.textContent = '▶️';
+    if (voicePlayerCard) voicePlayerCard.classList.remove('playing');
+    if (voiceStatusLabel) voiceStatusLabel.textContent = '🎙️ Voice Paused (Tap to resume)';
+  }
+}
+
+// Sync Voice Progress Bar & Ended State
 if (roseVoicePlayer) {
+  roseVoicePlayer.addEventListener('timeupdate', () => {
+    if (roseVoicePlayer.duration && voiceProgressBar) {
+      voiceProgressBar.value = (roseVoicePlayer.currentTime / roseVoicePlayer.duration) * 100;
+    }
+  });
+
+  if (voiceProgressBar) {
+    voiceProgressBar.addEventListener('input', () => {
+      if (roseVoicePlayer.duration) {
+        roseVoicePlayer.currentTime = (voiceProgressBar.value / 100) * roseVoicePlayer.duration;
+      }
+    });
+  }
+
   roseVoicePlayer.addEventListener('ended', () => {
-    const roseEl = document.getElementById('interactive-rose');
-    const tapHint = document.getElementById('rose-tap-hint');
-    if (roseEl) roseEl.classList.remove('playing-voice');
-    if (tapHint) tapHint.textContent = "နောက်တစ်ခေါက် ပြန်နားထောင်မယ်ဆို နှိပ်နော် 🌹🎧";
+    if (voicePlayBtn) voicePlayBtn.textContent = '▶️';
+    if (voicePlayerCard) voicePlayerCard.classList.remove('playing');
+    if (voiceStatusLabel) voiceStatusLabel.textContent = '🎙️ Replay ဝမ်ဝမ်း၏ အသံလေး 🌹🎧';
+    if (voiceProgressBar) voiceProgressBar.value = 0;
   });
 }
 
@@ -688,8 +747,10 @@ function stopRoseVoice() {
     roseVoicePlayer.pause();
     roseVoicePlayer.currentTime = 0;
   }
-  const roseEl = document.getElementById('interactive-rose');
-  if (roseEl) roseEl.classList.remove('playing-voice');
+  if (voicePlayBtn) voicePlayBtn.textContent = '▶️';
+  if (voicePlayerCard) voicePlayerCard.classList.remove('playing');
+  if (voiceStatusLabel) voiceStatusLabel.textContent = '🎙️ Voice Message from ဝမ်ဝမ်း (Tap to listen)';
+  if (voiceProgressBar) voiceProgressBar.value = 0;
 }
 
 function spawnFallingRosePetals(centerX, centerY, count = 10) {
@@ -732,60 +793,77 @@ function spawnFallingRosePetals(centerX, centerY, count = 10) {
   });
 }
 
+// Tapping the flower itself just waves and drops petals!
 function pokeRose(e) {
   if (e) e.stopPropagation();
   const roseEl = document.getElementById('interactive-rose');
-  const roseTitle = document.getElementById('rose-title');
-  const msgBox = document.getElementById('rose-message-box');
-  const tapHint = document.getElementById('rose-tap-hint');
   if (!roseEl) return;
 
-  // 1. Trigger playful wave & sway animation on the rose
   roseEl.classList.remove('waving');
   void roseEl.offsetWidth;
   roseEl.classList.add('waving');
 
-  // 2. Shower falling velvet rose petals downward from the flower head
+  if (typeof audio !== 'undefined' && (!roseVoicePlayer || roseVoicePlayer.paused)) {
+    audio.init();
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    audio.playNote(notes[rosePokeCount % notes.length]);
+  }
+  rosePokeCount++;
+
   const rect = roseEl.getBoundingClientRect();
   const flowerHeadX = rect.left + rect.width / 2;
   const flowerHeadY = rect.top + rect.height * 0.38;
-  spawnFallingRosePetals(flowerHeadX, flowerHeadY, 12);
-
-  // 3. Swap the title & highlight the visible Burmese text as the voice translation
-  if (roseTitle) {
-    roseTitle.textContent = "ကုကု နားမလည်မှာစိုးလို့ အောက်မှာ မြန်မာလိုထည့်ထားတယ်နော် 😭 အရင်ကစာအတိုင်းပါပဲ ဒါမဲ့ ဒီလိုလေးပြောလိုက်ရင် ပိုကောင်းမလားလို့လေ ဟီးးး🥺";
-    roseTitle.classList.add('voice-active-title');
-  }
-  if (msgBox) {
-    msgBox.classList.add('translation-mode');
-  }
-
-  // 4. Pause background chimes & MP3 music so your voice recording is crystal clear
-  if (typeof audio !== 'undefined' && audio.isPlaying) {
-    audio.stop();
-  }
-  if (typeof pauseMp3Player === 'function') {
-    pauseMp3Player();
-  }
-
-  // 5. Play your voice.mp3 recording
-  if (roseVoicePlayer) {
-    roseVoicePlayer.currentTime = 0;
-    roseVoicePlayer.play().then(() => {
-      roseEl.classList.add('playing-voice');
-      if (tapHint) tapHint.textContent = "🔊 ဝမ်ဝမ်းအသံလေး ဖွင့်နေပါတယ်နော်... 🌹🎧";
-    }).catch(err => console.log("Voice playback error (check audio/voice.mp3):", err));
-  }
-
-  // 6. Send instant Telegram alert
-  sendTelegramAlert(`🎙️🌹 顾顾 tapped the Rose and is listening to your voice message (voice.mp3) right now! 🥺🤍\n⏰ Time: ${new Date().toLocaleString()}`);
+  spawnFallingRosePetals(flowerHeadX, flowerHeadY, 10);
 }
 
+function spawnSmoothPetals(startX, startY, count = 16) {
+  const symbols = ['🌹', '🌸', '✨', '🤍', '🌹', '💖', '🍀', '🌸'];
+  const fragment = document.createDocumentFragment();
+  const particles = [];
+
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.textContent = symbols[i % symbols.length];
+    p.style.cssText = `
+      position: fixed;
+      left: ${startX}px;
+      top: ${startY}px;
+      font-size: ${Math.floor(Math.random() * 12) + 20}px;
+      z-index: 3000;
+      pointer-events: none;
+      user-select: none;
+      will-change: transform, opacity;
+    `;
+    fragment.appendChild(p);
+    particles.push(p);
+  }
+
+  document.body.appendChild(fragment);
+
+  particles.forEach(p => {
+    const angle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 200 + 70;
+    const tx = Math.cos(angle) * distance;
+    const ty = -Math.abs(Math.sin(angle) * distance) - (Math.random() * 160 + 50);
+    const rot = Math.random() * 320 - 160;
+
+    const anim = p.animate([
+      { transform: 'translate3d(-50%, -50%, 0) scale(0.6) rotate(0deg)', opacity: 1 },
+      { transform: `translate3d(calc(-50% + ${tx}px), calc(-50% + ${ty}px), 0) scale(1.15) rotate(${rot}deg)`, opacity: 0 }
+    ], {
+      duration: 1150 + Math.random() * 300,
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      fill: 'forwards'
+    });
+
+    anim.onfinish = () => p.remove();
+  });
+}
 
 function acceptRose(e) {
   if (e) e.stopPropagation();
   stopRoseVoice();
-  document.body.style.overflow = ''; // Unlock background letter scroll
+  document.body.style.overflow = '';
 
   const roseOverlay = document.getElementById('rose-overlay');
   const floatingRoseBtn = document.getElementById('floating-rose-btn');
@@ -805,7 +883,7 @@ function acceptRose(e) {
 
     showSongNoti(
       "Flower Accepted 🌹🤍",
-      "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
+      "နှင်းဆီပန်းကိုပြန်ကြည့်ချင်ရင် အောက် 🌹 icon လေးကိုနှိပ်ပြီးပြန်ကြည့်လို့ရပါတယ်နော် ကုကု ✨"
     );
 
     setTimeout(() => {
@@ -818,7 +896,7 @@ function acceptRose(e) {
 function closeRoseOverlay(e) {
   if (e) e.stopPropagation();
   stopRoseVoice();
-  document.body.style.overflow = ''; // Unlock background letter scroll
+  document.body.style.overflow = '';
 
   const roseOverlay = document.getElementById('rose-overlay');
   const floatingRoseBtn = document.getElementById('floating-rose-btn');
@@ -837,7 +915,7 @@ function reopenRose() {
     void roseOverlay.offsetWidth;
     roseOverlay.classList.add('active');
     roseOverlay.scrollTop = 0;
-    document.body.style.overflow = 'hidden'; // Lock background scroll while rose is open
+    document.body.style.overflow = 'hidden';
   }
 
   requestAnimationFrame(() => {
@@ -852,3 +930,4 @@ function reopenRose() {
     }, 40);
   });
 }
+
